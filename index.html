@@ -13,72 +13,81 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            text-align: center;
+            font-size: 1.5em; /* Ajuste para melhor visualização em TVs */
         }
         header {
             background-color: #007BFF;
             color: white;
             padding: 20px;
-            text-align: center;
             width: 100%;
         }
         .app-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
             padding: 20px;
-            width: 90%;
-            max-width: 1200px;
+            width: 95%;
+            max-width: 1500px;
         }
         .app-card {
             background-color: white;
-            border: 1px solid #ddd;
-            border-radius: 10px;
+            border: 2px solid #ddd;
+            border-radius: 15px;
             padding: 20px;
-            text-align: center;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            width: 280px;
+            box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.15);
+            transition: transform 0.2s;
+        }
+        .app-card:hover {
+            transform: scale(1.05);
         }
         .app-card img {
-            width: 100px;
-            height: 100px;
+            width: 120px;
+            height: 120px;
             object-fit: contain;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
         .buttons {
             display: flex;
-            justify-content: space-around;
-            margin-top: 10px;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
         }
         .buttons a {
             text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 5px;
+            padding: 12px;
+            border-radius: 8px;
             color: white;
-            background-color: #007BFF;
             font-weight: bold;
-            transition: transform 0.2s, background-color 0.3s;
+            background-color: #007BFF;
+            display: block;
+            font-size: 1.2em;
         }
         .buttons a:hover {
             background-color: #0056b3;
         }
-        .buttons a:active {
-            transform: scale(0.95);
+        /* Melhor compatibilidade com controles remotos */
+        a:focus {
+            outline: 3px solid yellow;
         }
     </style>
 </head>
 <body>
     <header>
         <h1>ASA APPS</h1>
-        <p>Criado por João Paulo - Melhor acessibilidade aos apps que você gosta. Alguns aplicativos podem estar desatualizados, mas, ao baixá-los e instalá-los, será exibida a opção de atualizar diretamente dentro do app.🙂👍</p>
+        <p>Criado por João Paulo - Melhor acessibilidade aos apps que você gosta</p>
     </header>
     <div class="app-container">
-
+        
         <!-- TVExpress -->
         <div class="app-card">
             <img src="https://raw.githubusercontent.com/Joaozim0/Image/main/IMG_2462.png" alt="TVExpress">
             <h2>TVExpress</h2>
             <div class="buttons">
-                <a href="https://www.mediafire.com/file/qqedmqrajiwfjcu/TV_3.7.0_20241105_stb_generic.apk/file">SmartTV/TVbox</a>
-                <a href="https://www.mediafire.com/file/6ufokq0lm1ijf4w/TVMobile_mob04001_4.4.1_mobile_web.apk/file">Smartphone</a>
+                <a href="https://www.mediafire.com/file/qqedmqrajiwfjcu/TV_3.7.0_20241105_stb_generic.apk/file" tabindex="1">SmartTV/TVbox</a>
+                <a href="https://www.mediafire.com/file/6ufokq0lm1ijf4w/TVMobile_mob04001_4.4.1_mobile_web.apk/file" tabindex="2">Smartphone</a>
             </div>
         </div>
 
@@ -87,8 +96,8 @@
             <img src="https://raw.githubusercontent.com/Joaozim0/Image/main/IMG_2463.jpeg" alt="UniTV">
             <h2>UniTV</h2>
             <div class="buttons">
-                <a href="https://www.mediafire.com/file/hcab72tsmmwrwyy/unitv_UN-TVAK-1.apk/file">SmartTV/TVbox</a>
-                <a href="https://www.mediafire.com/file/2i49dyf8gq9ab5m/unitviptvmobile_UN-MOAP-1.apk/file">Smartphone</a>
+                <a href="https://www.mediafire.com/file/hcab72tsmmwrwyy/unitv_UN-TVAK-1.apk/file" tabindex="3">SmartTV/TVbox</a>
+                <a href="https://www.mediafire.com/file/2i49dyf8gq9ab5m/unitviptvmobile_UN-MOAP-1.apk/file" tabindex="4">Smartphone</a>
             </div>
         </div>
 
@@ -97,8 +106,8 @@
             <img src="https://raw.githubusercontent.com/Joaozim0/Image/main/IMG_2467.png" alt="OnPix">
             <h2>OnPix</h2>
             <div class="buttons">
-                <a href="https://www.mediafire.com/file/t3y1av1k13gym02/PIX+TV_1.0.0_20220701_stb+(2).apk/file">SmartTV/TVbox</a>
-                <a href="https://www.mediafire.com/file/ualo0v4vvyc0en5/onpix_mobile.apk/file">Smartphone</a>
+                <a href="https://www.mediafire.com/file/t3y1av1k13gym02/PIX+TV_1.0.0_20220701_stb+(2).apk/file" tabindex="5">SmartTV/TVbox</a>
+                <a href="https://www.mediafire.com/file/ualo0v4vvyc0en5/onpix_mobile.apk/file" tabindex="6">Smartphone</a>
             </div>
         </div>
 
@@ -107,8 +116,8 @@
             <img src="https://raw.githubusercontent.com/Joaozim0/Image/main/IMG_2468.jpeg" alt="BlueTV">
             <h2>BlueTV</h2>
             <div class="buttons">
-                <a href="https://www.mediafire.com/file/u64zao60zsva5ux/BlueTV_v3.4.1.apk/file">SmartTV/TVbox</a>
-                <a href="https://www.mediafire.com/file/ul2awioj62srvkn/Blue_Mobile_3.0.1_20240710_mobile.apk/file">Smartphone</a>
+                <a href="https://www.mediafire.com/file/u64zao60zsva5ux/BlueTV_v3.4.1.apk/file" tabindex="7">SmartTV/TVbox</a>
+                <a href="https://www.mediafire.com/file/ul2awioj62srvkn/Blue_Mobile_3.0.1_20240710_mobile.apk/file" tabindex="8">Smartphone</a>
             </div>
         </div>
 
@@ -117,8 +126,8 @@
             <img src="https://raw.githubusercontent.com/Joaozim0/Image/main/IMG_2469.jpeg" alt="Eppi Cinema">
             <h2>Eppi Cinema</h2>
             <div class="buttons">
-                <a href="https://www.mediafire.com/file/m9b6zb02cwmgthu/eppi_web_stb_PROD_4.0.3_20250224.apk/file">SmartTV/TVbox</a>
-                <a href="https://www.mediafire.com/file/fb27h3dxw7por34/eppi_web_mobile_PROD_4.0.2_20241104.apk/file">Smartphone</a>
+                <a href="https://www.mediafire.com/file/m9b6zb02cwmgthu/eppi_web_stb_PROD_4.0.3_20250224.apk/file" tabindex="9">SmartTV/TVbox</a>
+                <a href="https://www.mediafire.com/file/fb27h3dxw7por34/eppi_web_mobile_PROD_4.0.2_20241104.apk/file" tabindex="10">Smartphone</a>
             </div>
         </div>
 
@@ -127,25 +136,9 @@
             <img src="https://raw.githubusercontent.com/Joaozim0/Image/main/IMG_2470.png" alt="Nebu">
             <h2>Nebu</h2>
             <div class="buttons">
-                <a href="https://www.mediafire.com/file/po85zti60lmperv/nebu_generic_stb_PROD_1.0.1_20241202.apk/file">SmartTV/TVbox</a>
-                <a href="https://www.mediafire.com/file/5jnxhml9se3b6tv/nebu_generic_mobile_PROD_1.0.1beta2_20241120.apk/file">Smartphone</a>
+                <a href="https://www.mediafire.com/file/po85zti60lmperv/nebu_generic_stb_PROD_1.0.1_20241202.apk/file" tabindex="11">SmartTV/TVbox</a>
+                <a href="https://www.mediafire.com/file/5jnxhml9se3b6tv/nebu_generic_mobile_PROD_1.0.1beta2_20241120.apk/file" tabindex="12">Smartphone</a>
             </div>
-        </div>
-
-        <!-- SmartTube Beta -->
-        <div class="app-card">
-            <img src="https://raw.githubusercontent.com/Joaozim0/Image/main/IMG_2471.png" alt="SmartTube Beta">
-            <h2>SmartTube Beta</h2>
-            <div class="buttons">
-                <a href="https://www.mediafire.com/file/czkfkcv9q2ztwpk/smarttube_beta.apk/file">SmartTV/TVbox</a>
-            </div>
-            <div class="app-card">
-    <img src="https://raw.githubusercontent.com/Joaozim0/Image/refs/heads/main/IMG_2473.png" alt="Ícone Launcher Manager">
-    <h2>Launcher Manager</h2>
-    <div class="buttons">
-        <a href="https://www.mediafire.com/file/ifj7c6az3zlszus/Launcher+Manager+v1.0.3.apk/file">SmartTV/TVbox</a>
-    </div>
-</div>
         </div>
 
     </div>
