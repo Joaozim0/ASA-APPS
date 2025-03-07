@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASA APPS - Loja de Aplicativos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+        }
+        .app-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            width: 90%;
+            max-width: 1200px;
+        }
+        .app-card {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .app-card img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 10px;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 10px;
+        }
+        .buttons a {
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: white;
+            background-color: #007BFF;
+            font-weight: bold;
+            transition: transform 0.2s, background-color 0.3s;
+        }
+        .buttons a:hover {
+            background-color: #0056b3;
+        }
+        .buttons a:active {
+            transform: scale(0.95); /* Efeito ao clicar */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>ASA APPS</h1>
+        <p>Criado por João Paulo - Melhor acessibilidade aos apps que você gosta 🙂👍</p>
+    </header>
+    <div class="app-container">
+        <div class="app-card">
+            <img src="https://raw.githubusercontent.com/Joaozim0/Image/629daa93a914dcaa43113c3a6a3d095f28a5aa8c/IMG_2462.png" alt="Ícone TVExpress">
+            <h2>TVExpress</h2>
+            <div class="buttons">
+                <a href="https://www.mediafire.com/file/qqedmqrajiwfjcu/TV_3.7.0_20241105_stb_generic.apk/file">SmartTV/TVbox</a>
+                <a href="https://www.mediafire.com/file/6ufokq0lm1ijf4w/TVMobile_mob04001_4.4.1_mobile_web.apk/file">smartphoneAndroid</a>
+            </div>
+        </div>
+        <div class="app-card">
+            <img src="https://raw.githubusercontent.com/Joaozim0/Image/refs/heads/main/IMG_2463.jpeg" alt="Ícone UniTV">
+            <h2>UniTV</h2>
+            <div class="buttons">
+                <a href="https://www.mediafire.com/file/hcab72tsmmwrwyy/unitv_UN-TVAK-1.apk/file">SmartTV/TVbox</a>
+                <a href="https://www.mediafire.com/file/2i49dyf8gq9ab5m/unitviptvmobile_UN-MOAP-1.apk/file">smartphoneAndroid</a>
+            </div>
+        </div>
+        <div class="app-card">
+            <img src="https://raw.githubusercontent.com/Joaozim0/Image/refs/heads/main/IMG_2464.png" alt="Ícone UniTV Net">
+            <h2>UniTV Net</h2>
+            <div class="buttons">
+                <a href="https://www.mediafire.com/file/7fy3iqxvocroybt/unitvnet-tv.apk/file">SmartTV/TVbox</a>
+                <a href="https://www.mediafire.com/file/02ol3u2ewam8575/unitvnet-celular.apk/file">smartphoneAndroid</a>
+            </div>
+        </div>
+        <div class="app-card">
+            <img src="https://raw.githubusercontent.com/Joaozim0/Image/refs/heads/main/IMG_2465.jpeg" alt="Ícone DunaTV">
+            <h2>DunaTV</h2>
+            <div class="buttons">
+                <a href="https://www.mediafire.com/file/52xa1jkjaqlj41t/DunaTV_1.3.0_20240912_stb.apk/file">SmartTV/TVbox</a>
+                <a href="https://www.mediafire.com/file/b9ecdr9oalqctjh/Duna_TV_Mobille_1.0.3.apk/file">smartphoneAndroid</a>
+            </div>
+        </div>
+        <div class="app-card">
+            <img src="https://raw.githubusercontent.com/Joaozim0/Image/refs/heads/main/IMG_2471.png" alt="Ícone SmartTube Beta">
+            <h2>SmartTube Beta</h2>
+            <div class="buttons">
+                <a href="https://www.mediafire.com/file/czkfkcv9q2ztwpk/smarttube_beta.apk/file">SmartTV/TVbox</a>
+            </div>
+        </div>
+        <div class="app-card">
+            <img src="https://raw.githubusercontent.com/Joaozim0/Image/refs/heads/main/IMG_2473.png" alt="Ícone Launcher Manager">
+            <h2>Launcher Manager</h2>
+            <div class="buttons">
+                <a href="https://www.mediafire.com/file/ifj7c6az3zlszus/Launcher+Manager+v1.0.3.apk/file">SmartTV/TVbox</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
