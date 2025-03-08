@@ -25,7 +25,7 @@
             text-align: center;
         }
 
-        /* Contêiner dos botões */
+        /* Contêiner dos botões do menu */
         .menu-buttons {
             display: flex;
             justify-content: center;
@@ -34,6 +34,7 @@
             flex-wrap: wrap;
         }
 
+        /* Botões do menu */
         .menu-buttons a {
             text-decoration: none;
             padding: 12px 20px;
@@ -58,6 +59,34 @@
             width: 95%;
             max-width: 1500px;
         }
+
+        /* Estilo dos botões dentro dos cards de aplicativos */
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .buttons a {
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            background-color: #007BFF;
+            display: block;
+            font-size: 1.2em;
+        }
+
+        .buttons a:hover {
+            background-color: #0056b3;
+        }
+
+        /* Melhor compatibilidade com controles remotos */
+        a:focus {
+            outline: 3px solid yellow;
+        }
     </style>
 </head>
 <body>
@@ -74,14 +103,13 @@
     </div>
 
     <div class="app-container">
-        
-        <!-- TVExpress -->
+        <!-- Exemplo de um aplicativo -->
         <div class="app-card">
             <img src="https://raw.githubusercontent.com/Joaozim0/Image/main/IMG_2462.png" alt="TVExpress">
             <h2>TVExpress</h2>
             <div class="buttons">
-                <a href="https://www.mediafire.com/file/qqedmqrajiwfjcu/TV_3.7.0_20241105_stb_generic.apk/file" tabindex="1">SmartTV/TVbox</a>
-                <a href="https://www.mediafire.com/file/6ufokq0lm1ijf4w/TVMobile_mob04001_4.4.1_mobile_web.apk/file" tabindex="2">Smartphone</a>
+                <a href="https://www.mediafire.com/file/qqedmqrajiwfjcu/TV_3.7.0_20241105_stb_generic.apk/file">SmartTV/TVbox</a>
+                <a href="https://www.mediafire.com/file/6ufokq0lm1ijf4w/TVMobile_mob04001_4.4.1_mobile_web.apk/file">Smartphone</a>
             </div>
         </div>
 
