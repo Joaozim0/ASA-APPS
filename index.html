@@ -14,7 +14,7 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            font-size: 1.5em;
+            font-size: 1.2em; /* Reduzi um pouco para melhor adaptação */
         }
 
         header {
@@ -37,12 +37,12 @@
         /* Botões do menu */
         .menu-buttons a {
             text-decoration: none;
-            padding: 12px 20px;
+            padding: 10px 15px;
             border-radius: 8px;
             color: white;
             font-weight: bold;
             background-color: #007BFF;
-            font-size: 1.2em;
+            font-size: 1em; /* Mantém o tamanho normal dos botões */
             transition: background 0.3s;
         }
 
@@ -70,17 +70,24 @@
 
         .buttons a {
             text-decoration: none;
-            padding: 12px;
+            padding: 10px;
             border-radius: 8px;
             color: white;
             font-weight: bold;
             background-color: #007BFF;
             display: block;
-            font-size: 1.2em;
+            font-size: 1em; /* Mantém o tamanho normal dos botões dentro dos apps */
         }
 
         .buttons a:hover {
             background-color: #0056b3;
+        }
+
+        /* Correção do tamanho das imagens */
+        .app-card img {
+            width: 100px; /* Ajuste para manter um tamanho padrão */
+            height: 100px;
+            object-fit: contain;
         }
 
         /* Melhor compatibilidade com controles remotos */
