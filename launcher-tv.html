@@ -62,7 +62,8 @@
     <script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
     <script>
         async function loadM3U() {
-            const response = await fetch('https://raw.githubusercontent.com/GIF553/Servidores/main/pvr.gif.peg.tv.m3u');
+            // URL da lista M3U fornecida
+            const response = await fetch('http://bit.ly/tvmeutedio');
             const m3uContent = await response.text();
             const lines = m3uContent.split('\n');
             const channelList = document.getElementById('channelList');
@@ -78,7 +79,7 @@
                     // Cria o elemento da lista com link para o canal
                     const listItem = document.createElement('li');
                     const link = document.createElement('a');
-                    link.textContent = currentChannelName;
+                    link.textContent = currentChannelName || 'Canal sem nome';
                     link.href = '#';
                     link.onclick = () => playStream(line);
                     listItem.appendChild(link);
