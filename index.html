@@ -1,205 +1,118 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ASA APPS - Loja de Aplicativos</title>
+    <title>IPTV Player</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            font-size: 1.2em; /* Reduzi um pouco para melhor adaptação */
+        body { font-family: Arial, sans-serif; text-align: center; background: #222; color: white; margin: 0; padding: 0; }
+        
+        /* Player fixo no topo */
+        #player-container { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            background: black; 
+            padding: 10px 0;
+            z-index: 1000; 
         }
+        
+        video { width: 100%; max-height: 300px; }
 
-        header {
-            background-color: #007BFF;
-            color: white;
-            padding: 20px;
-            width: 100%;
-            text-align: center;
-        }
-
-        /* Contêiner dos botões do menu */
-        .menu-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-
-        /* Botões do menu */
-        .menu-buttons a {
-            text-decoration: none;
-            padding: 10px 15px;
-            border-radius: 8px;
-            color: white;
-            font-weight: bold;
-            background-color: #007BFF;
-            font-size: 1em; /* Mantém o tamanho normal dos botões */
-            transition: background 0.3s;
-        }
-
-        .menu-buttons a:hover {
-            background-color: #0056b3;
-        }
-
-        .app-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 30px;
-            padding: 20px;
-            width: 95%;
-            max-width: 1500px;
-        }
-
-        /* Estilo dos botões dentro dos cards de aplicativos */
-        .buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .buttons a {
-            text-decoration: none;
+        /* Lista de canais ajustada para rolar sem mover o player */
+        #channels-container { 
+            margin-top: 320px; /* Deixar espaço para o player fixo */
             padding: 10px;
-            border-radius: 8px;
-            color: white;
-            font-weight: bold;
-            background-color: #007BFF;
+            overflow-y: auto;
+        }
+
+        #channels { 
+            display: flex; 
+            flex-wrap: wrap; 
+            justify-content: center; 
+        }
+
+        .channel { 
+            cursor: pointer; 
+            padding: 10px; 
+            border: 1px solid white; 
+            margin: 5px; 
+            text-align: center;
+            width: 120px;
+            background: #333; 
+            border-radius: 5px;
+        }
+
+        .channel img { 
+            width: 80px; 
+            height: 80px; 
             display: block;
-            font-size: 1em; /* Mantém o tamanho normal dos botões dentro dos apps */
-        }
-
-        .buttons a:hover {
-            background-color: #0056b3;
-        }
-
-        /* Correção do tamanho das imagens */
-        .app-card img {
-            width: 100px; /* Ajuste para manter um tamanho padrão */
-            height: 100px;
-            object-fit: contain;
-        }
-
-        /* Melhor compatibilidade com controles remotos */
-        a:focus {
-            outline: 3px solid yellow;
+            margin: 0 auto 5px;
         }
     </style>
 </head>
 <body>
-
-    <header>
-        <h1>ASA APPS</h1>
-    </header>
-
-    <!-- Botões horizontais -->
-    <div class="menu-buttons">
-        <a href="lista-iptv.html">Lista IPTV</a>
-        <a href="Tv-ao-vivo.html">Tv ao Vivo</a>
-        <a href="launcher-tv.html">Beta Tv</a>
-        <a href="#">Em breve</a>
+    <div id="player-container">
+        <video id="player" controls autoplay></video>
     </div>
 
-    <div class="app-container">
-        <!-- Exemplo de um aplicativo -->
-        <div class="app-card">
-            <img src="https://raw.githubusercontent.com/Joaozim0/Image/main/IMG_2462.png" alt="TVExpress">
-            <h2>TVExpress</h2>
-            <div class="buttons">
-                <a href="https://www.mediafire.com/file/qqedmqrajiwfjcu/TV_3.7.0_20241105_stb_generic.apk/file">SmartTV/TVbox</a>
-                <a href="https://www.mediafire.com/file/6ufokq0lm1ijf4w/TVMobile_mob04001_4.4.1_mobile_web.apk/file">Smartphone</a>
-            </div>
-        </div>
-
-        <!-- UniTV -->
-        <div class="app-card">
-            <img src="https://raw.githubusercontent.com/Joaozim0/Image/main/IMG_2463.jpeg" alt="UniTV">
-            <h2>UniTV</h2>
-            <div class="buttons">
-                <a href="https://www.mediafire.com/file/hcab72tsmmwrwyy/unitv_UN-TVAK-1.apk/file" tabindex="3">SmartTV/TVbox</a>
-                <a href="https://www.mediafire.com/file/2i49dyf8gq9ab5m/unitviptvmobile_UN-MOAP-1.apk/file" tabindex="4">Smartphone</a>
-            </div>
-        </div>
-
-        <!-- OnPix -->
-        <div class="app-card">
-            <img src="https://raw.githubusercontent.com/Joaozim0/Image/main/IMG_2467.png" alt="OnPix">
-            <h2>OnPix</h2>
-            <div class="buttons">
-                <a href="https://www.mediafire.com/file/t3y1av1k13gym02/PIX+TV_1.0.0_20220701_stb+(2).apk/file" tabindex="5">SmartTV/TVbox</a>
-                <a href="https://www.mediafire.com/file/ualo0v4vvyc0en5/onpix_mobile.apk/file" tabindex="6">Smartphone</a>
-            </div>
-        </div>
-        <div class="app-card">
-            <img src="https://raw.githubusercontent.com/Joaozim0/Image/refs/heads/main/IMG_2488.jpeg" alt="Ícone Launcher Manager">
-            <h2>Brasil Tv </h2>
-            <div class="buttons">
-                <a href="https://www.mediafire.com/file/5ae426iyt8gp508/brasiltvmobile_BRMDW.apk/file">Smartphone</a>
-            </div>
-        </div>
-
-        <!-- BlueTV -->
-        <div class="app-card">
-            <img src="https://raw.githubusercontent.com/Joaozim0/Image/main/IMG_2468.jpeg" alt="BlueTV">
-            <h2>BlueTV</h2>
-            <div class="buttons">
-                <a href="https://www.mediafire.com/file/u64zao60zsva5ux/BlueTV_v3.4.1.apk/file" tabindex="7">SmartTV/TVbox</a>
-                <a href="https://www.mediafire.com/file/ul2awioj62srvkn/Blue_Mobile_3.0.1_20240710_mobile.apk/file" tabindex="8">Smartphone</a>
-            </div>
-        </div>
-        <div class="app-card">
-            <img src="https://raw.githubusercontent.com/Joaozim0/Image/refs/heads/main/IMG_2487.png" alt="Ícone Launcher Manager">
-            <h2>HTV App</h2>
-            <div class="buttons">
-                <a href="https://www.mediafire.com/file/z3ezzfgis927zul/signHtv_BR-HPAK.apk/file">SmartTV/TVbox</a>
-            </div>
-        </div>
-
-        <!-- Eppi Cinema -->
-        <div class="app-card">
-            <img src="https://raw.githubusercontent.com/Joaozim0/Image/main/IMG_2469.jpeg" alt="Eppi Cinema">
-            <h2>Eppi Cinema</h2>
-            <div class="buttons">
-                <a href="https://www.mediafire.com/file/m9b6zb02cwmgthu/eppi_web_stb_PROD_4.0.3_20250224.apk/file" tabindex="9">SmartTV/TVbox</a>
-                <a href="https://www.mediafire.com/file/fb27h3dxw7por34/eppi_web_mobile_PROD_4.0.2_20241104.apk/file" tabindex="10">Smartphone</a>
-            </div>
-        </div>
-
-        <!-- Nebu -->
-        <div class="app-card">
-            <img src="https://raw.githubusercontent.com/Joaozim0/Image/main/IMG_2470.png" alt="Nebu">
-            <h2>Nebu</h2>
-            <div class="buttons">
-                <a href="https://www.mediafire.com/file/po85zti60lmperv/nebu_generic_stb_PROD_1.0.1_20241202.apk/file" tabindex="11">SmartTV/TVbox</a>
-                <a href="https://www.mediafire.com/file/5jnxhml9se3b6tv/nebu_generic_mobile_PROD_1.0.1beta2_20241120.apk/file" tabindex="12">Smartphone</a>
-            </div>
-        </div>
-         <!-- SmartTube Beta -->
-        <div class="app-card">
-            <img src="https://raw.githubusercontent.com/Joaozim0/Image/main/IMG_2471.png" alt="SmartTube Beta">
-            <h2>SmartTube Beta</h2>
-            <div class="buttons">
-                <a href="https://www.mediafire.com/file/czkfkcv9q2ztwpk/smarttube_beta.apk/file">SmartTV/TVbox</a>
-            </div>
-        </div>
-                <div class="app-card">
-            <img src="https://raw.githubusercontent.com/Joaozim0/Image/refs/heads/main/IMG_2473.png" alt="Ícone Launcher Manager">
-            <h2>Launcher Manager</h2>
-            <div class="buttons">
-                <a href="https://www.mediafire.com/file/ifj7c6az3zlszus/Launcher+Manager+v1.0.3.apk/file">SmartTV/TVbox</a>
-            </div>
-        </div>
-
+    <div id="channels-container">
+        <h2>Lista de Canais</h2>
+        <div id="channels"></div>
     </div>
+
+    <script>
+        let server = "http://turbocdn.sbs";
+        let username = "35498512";
+        let password = "35685524";
+
+        async function loadChannels() {
+            let apiUrl = `${server}/player_api.php?username=${username}&password=${password}&action=get_live_streams`;
+            try {
+                let response = await fetch(apiUrl);
+                let data = await response.json();
+
+                if (!data || data.length === 0) {
+                    document.getElementById("channels").innerHTML = "<p>Nenhum canal encontrado.</p>";
+                    return;
+                }
+
+                let channelsHtml = "";
+                data.forEach(channel => {
+                    channelsHtml += `<div class="channel" onclick="playChannel(${channel.stream_id})">
+                        <img src="${channel.stream_icon || 'https://via.placeholder.com/80'}">
+                        <p>${channel.name}</p>
+                    </div>`;
+                });
+
+                document.getElementById("channels").innerHTML = channelsHtml;
+            } catch (error) {
+                document.getElementById("channels").innerHTML = "<p>Erro ao carregar canais.</p>";
+            }
+        }
+
+        function playChannel(stream_id) {
+            let video = document.getElementById("player");
+            let channelUrl = `${server}/live/${username}/${password}/${stream_id}.m3u8`;
+
+            // Verifica se HLS.js é suportado
+            if (Hls.isSupported()) {
+                if (window.hls) {
+                    window.hls.destroy();
+                }
+
+                window.hls = new Hls();
+                window.hls.loadSource(channelUrl);
+                window.hls.attachMedia(video);
+            } else {
+                video.src = channelUrl;
+                video.play();
+            }
+        }
+
+        loadChannels();
+    </script>
 </body>
 </html>
