@@ -110,7 +110,7 @@
                         xhr.setRequestHeader("User-Agent", "VLC/3.0.18 LibVLC/3.0.18");
                     }
                 });
-                window.hls.loadSource(proxyUrl + channelUrl);
+                window.hls.loadSource(channelUrl);
                 window.hls.attachMedia(video);
             } else {
                 video.src = proxyUrl + channelUrl;
