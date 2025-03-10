@@ -67,14 +67,15 @@
         let server = "http://turbocdn.sbs";
         let username = "35498512";
         let password = "35685524";
+        let proxyUrl = "https://corsproxy.io/?";
 
         async function loadChannels() {
-            let apiUrl = "http://ct5play.lat/player_api.php?username=Dyeimes&password=13579111315aa&action=get_live_streams";
+            let apiUrl = `${server}/player_api.php?username=${username}&password=${password}&action=get_live_streams`;
             try {
-                let response = await fetch(apiUrl);
+                let response = await fetch(proxyUrl + apiUrl);
                 let data = await response.json();
 
-                if (!data || data.length === 0) {
+                if (data.length === 0) {
                     document.getElementById("channels").innerHTML = "<p>Nenhum canal encontrado.</p>";
                     return;
                 }
@@ -97,18 +98,22 @@
             let video = document.getElementById("player");
             let channelUrl = `${server}/live/${username}/${password}/${stream_id}.m3u8`;
 
-            // Verifica se HLS.js é suportado
+            // Remover buffer atrasado para carregar mais rápido
             if (Hls.isSupported()) {
                 if (window.hls) {
                     window.hls.destroy();
                 }
-
-                window.hls = new Hls();
+                window.hls = new Hls({ 
+                    maxBufferLength: 5,  // Reduzir o buffer para começar a rodar rápido
+                    liveSyncDurationCount: 3,
+                    xhrSetup: function (xhr) {
+                        xhr.setRequestHeader("User-Agent", "VLC/3.0.18 LibVLC/3.0.18");
+                    }
+                });
                 window.hls.loadSource(channelUrl);
                 window.hls.attachMedia(video);
             } else {
-                video.src = channelUrl;
-                video.play();
+                video.src = proxyUrl + channelUrl;
             }
         }
 
