@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>v2- IPTV</title>
+    <title>Brasil TV - IPTV</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -59,14 +60,11 @@
 
     <div class="header">
         <div class="menu-icon">☰</div>
-        <div class="title">Brasil TV</div>
+        <div class="title">BrasilV3TV</div>
     </div>
 
     <div id="player-container">
-        <video id="player" controls autoplay>
-            <source id="video-source" src="" type="application/x-mpegURL">
-            Seu navegador não suporta reprodução de vídeos M3U8.
-        </video>
+        <video id="player" controls autoplay></video>
     </div>
 
     <div class="channel-list" id="channel-list">
@@ -74,7 +72,7 @@
     </div>
 
     <script>
-        const m3uUrl = "https://rebrand.ly/tvmeutedio";
+        const m3uUrl = "https://rebrand.ly/tvmeutedio"; // URL da lista IPTV
 
         async function loadM3U() {
             try {
@@ -117,10 +115,19 @@
 
         function playChannel(url) {
             let video = document.getElementById("player");
-            let source = document.getElementById("video-source");
-            source.src = url;
-            video.load();
-            video.play();
+            if (Hls.isSupported()) {
+                let hls = new Hls();
+                hls.loadSource(url);
+                hls.attachMedia(video);
+                hls.on(Hls.Events.MANIFEST_PARSED, function () {
+                    video.play();
+                });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = url;
+                video.play();
+            } else {
+                alert("Seu navegador não suporta a reprodução desse formato.");
+            }
         }
 
         loadM3U();
