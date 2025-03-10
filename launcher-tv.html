@@ -3,133 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ASA APPS - IPTV Player</title>
+    <title>IPTV Player</title>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: white;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-        }
-        #player-container {
-            width: 80%;
-            max-width: 800px;
-            margin: 20px auto;
-            background: black;
-            padding: 10px;
-            border-radius: 10px;
-        }
-        video {
-            width: 100%;
-            border-radius: 5px;
-        }
-        #channel-list {
-            max-width: 800px;
-            margin: 20px auto;
-            text-align: left;
-            background: #222;
-            padding: 10px;
-            border-radius: 10px;
-        }
-        .channel {
-            display: flex;
-            align-items: center;
-            padding: 10px;
-            cursor: pointer;
-            border-bottom: 1px solid #333;
-        }
-        .channel:hover {
-            background: #333;
-        }
-        .channel img {
-            width: 50px;
-            height: 50px;
-            margin-right: 10px;
-            border-radius: 5px;
-        }
+        body { font-family: Arial, sans-serif; text-align: center; background: #222; color: white; }
+        #player-container { width: 100%; max-width: 600px; margin: auto; }
+        video { width: 100%; max-height: 300px; background: black; }
+        #channels { display: flex; flex-wrap: wrap; justify-content: center; margin-top: 10px; }
+        .channel { cursor: pointer; padding: 5px; border: 1px solid white; margin: 5px; }
     </style>
 </head>
 <body>
-    <h1>ASA APPS - IPTV Player</h1>
-    
+    <h1>IPTV Player</h1>
     <div id="player-container">
-        <video id="player" controls></video>
+        <video id="player" controls autoplay></video>
     </div>
-    
-    <div id="channel-list">
-        <p>Carregando canais...</p>
-    </div>
+    <div id="channels"></div>
 
     <script>
-        // CONFIGURAÇÕES DA SUA LISTA IPTV (Xtream Codes)
-        const server = "http://ct5play.lat";
-        const username = "Dyeimes";
-        const password = "13579111315aa";
-        const apiUrl = `${server}/player_api.php?username=${username}&password=${password}&action=get_live_streams`;
+        let server = "http://ct5play.lat";
+        let username = "Dyeimes";
+        let password = "13579111315aa";
+        let proxyUrl = "https://corsproxy.io/?";
 
-        let hls;
-
-        async function loadXtreamCodes() {
+        async function loadChannels() {
+            let apiUrl = `${server}/player_api.php?username=${username}&password=${password}&action=get_live_streams`;
             try {
-                let response = await fetch(apiUrl);
-                if (!response.ok) throw new Error("Erro ao acessar a API.");
+                let response = await fetch(proxyUrl + apiUrl);
+                let data = await response.json();
 
-                let channels = await response.json();
-                if (!channels || channels.length === 0) throw new Error("Nenhum canal encontrado.");
-
-                displayChannels(channels);
-            } catch (error) {
-                document.getElementById("channel-list").innerHTML = `<p>${error.message}</p>`;
-            }
-        }
-
-        function displayChannels(channels) {
-            let list = document.getElementById("channel-list");
-            list.innerHTML = "";
-
-            channels.forEach(channel => {
-                let channelUrl = `https://corsproxy.io/?${server}/live/${username}/${password}/${channel.stream_id}.m3u8`;
-                
-                let div = document.createElement("div");
-                div.className = "channel";
-                div.innerHTML = `
-                    <img src="${channel.stream_icon || 'https://via.placeholder.com/50'}">
-                    ${channel.name}
-                `;
-                div.onclick = () => playChannel(channelUrl);
-                list.appendChild(div);
-            });
-        }
-
-        function playChannel(url) {
-            let video = document.getElementById("player");
-
-            if (Hls.isSupported()) {
-                if (!hls) {
-                    hls = new Hls();
-                    hls.attachMedia(video);
-                } else {
-                    hls.stopLoad();
-                    hls.detachMedia();
+                if (data.length === 0) {
+                    document.getElementById("channels").innerHTML = "<p>Nenhum canal encontrado.</p>";
+                    return;
                 }
 
-                hls.loadSource(url);
-                hls.attachMedia(video);
-                hls.on(Hls.Events.MANIFEST_PARSED, function () {
-                    video.play();
+                let channelsHtml = "";
+                data.forEach(channel => {
+                    channelsHtml += `<div class="channel" onclick="playChannel(${channel.stream_id})">
+                        <img src="${channel.stream_icon || 'https://via.placeholder.com/50'}" width="50" height="50">
+                        <p>${channel.name}</p>
+                    </div>`;
                 });
-            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                video.src = url;
-                video.play();
-            } else {
-                alert("Seu navegador não suporta a reprodução desse formato.");
+
+                document.getElementById("channels").innerHTML = channelsHtml;
+            } catch (error) {
+                document.getElementById("channels").innerHTML = "<p>Erro ao carregar canais.</p>";
             }
         }
 
-        loadXtreamCodes();
+        function playChannel(stream_id) {
+            let video = document.getElementById("player");
+            let channelUrl = `${server}/live/${username}/${password}/${stream_id}.m3u8`;
+
+            if (Hls.isSupported()) {
+                let hls = new Hls({ 
+                    xhrSetup: function (xhr) {
+                        xhr.setRequestHeader("User-Agent", "VLC/3.0.18 LibVLC/3.0.18");
+                    }
+                });
+                hls.loadSource(proxyUrl + channelUrl);
+                hls.attachMedia(video);
+            } else {
+                video.src = proxyUrl + channelUrl;
+            }
+        }
+
+        loadChannels();
     </script>
 </body>
 </html>
