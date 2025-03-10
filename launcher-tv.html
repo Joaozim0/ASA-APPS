@@ -1,1 +1,116 @@
-Em Breve
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brasil TV - IPTV</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: white;
+            text-align: center;
+            margin: 0;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: #1c1c1c;
+        }
+        .menu-icon {
+            font-size: 24px;
+            cursor: pointer;
+            margin-left: 15px;
+        }
+        .title {
+            flex-grow: 1;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        #player-container {
+            width: 100%;
+            height: 250px;
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .channel-list {
+            text-align: left;
+            padding: 10px;
+        }
+        .channel {
+            padding: 10px;
+            border-bottom: 1px solid #333;
+            cursor: pointer;
+        }
+        .channel:hover {
+            background-color: #222;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="menu-icon">☰</div>
+        <div class="title">Brasil TV</div>
+    </div>
+
+    <div id="player-container">
+        <iframe id="player" src="" allowfullscreen></iframe>
+    </div>
+
+    <div class="channel-list" id="channel-list">
+        <p>Carregando canais...</p>
+    </div>
+
+    <script>
+        const m3uUrl = "http://server10.maxcdn.link/get.php?username=ex121&password=nenegay&type=m3u_plus";
+
+        async function loadM3U() {
+            try {
+                let response = await fetch(m3uUrl);
+                let text = await response.text();
+                let lines = text.split("\n");
+                let channels = [];
+                for (let i = 0; i < lines.length; i++) {
+                    if (lines[i].startsWith("#EXTINF")) {
+                        let name = lines[i].split(",")[1].trim();
+                        let url = lines[i + 1].trim();
+                        channels.push({ name, url });
+                    }
+                }
+                displayChannels(channels);
+            } catch (error) {
+                document.getElementById("channel-list").innerHTML = "<p>Erro ao carregar a lista.</p>";
+            }
+        }
+
+        function displayChannels(channels) {
+            let list = document.getElementById("channel-list");
+            list.innerHTML = "";
+            channels.forEach(channel => {
+                let div = document.createElement("div");
+                div.className = "channel";
+                div.innerText = channel.name;
+                div.onclick = () => playChannel(channel.url);
+                list.appendChild(div);
+            });
+        }
+
+        function playChannel(url) {
+            document.getElementById("player").src = `https://iframe.m3u8player.com/embed.php?url=${url}`;
+        }
+
+        loadM3U();
+    </script>
+
+</body>
+</html>
