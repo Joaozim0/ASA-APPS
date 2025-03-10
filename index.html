@@ -7,57 +7,18 @@
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         body { font-family: Arial, sans-serif; text-align: center; background: #222; color: white; margin: 0; padding: 0; }
-        
-        /* Player fixo no topo */
-        #player-container { 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            background: black; 
-            padding: 10px 0;
-            z-index: 1000; 
-        }
-        
+        #player-container { position: fixed; top: 0; left: 0; width: 100%; background: black; padding: 10px 0; z-index: 1000; }
         video { width: 100%; max-height: 300px; }
-
-        /* Lista de canais ajustada para rolar sem mover o player */
-        #channels-container { 
-            margin-top: 320px; /* Deixar espaço para o player fixo */
-            padding: 10px;
-            overflow-y: auto;
-        }
-
-        #channels { 
-            display: flex; 
-            flex-wrap: wrap; 
-            justify-content: center; 
-        }
-
-        .channel { 
-            cursor: pointer; 
-            padding: 10px; 
-            border: 1px solid white; 
-            margin: 5px; 
-            text-align: center;
-            width: 120px;
-            background: #333; 
-            border-radius: 5px;
-        }
-
-        .channel img { 
-            width: 80px; 
-            height: 80px; 
-            display: block;
-            margin: 0 auto 5px;
-        }
+        #channels-container { margin-top: 320px; padding: 10px; overflow-y: auto; }
+        #channels { display: flex; flex-wrap: wrap; justify-content: center; }
+        .channel { cursor: pointer; padding: 10px; border: 1px solid white; margin: 5px; text-align: center; width: 120px; background: #333; border-radius: 5px; }
+        .channel img { width: 80px; height: 80px; display: block; margin: 0 auto 5px; }
     </style>
 </head>
 <body>
     <div id="player-container">
         <video id="player" controls autoplay></video>
     </div>
-
     <div id="channels-container">
         <h2>Lista de Canais</h2>
         <div id="channels"></div>
@@ -70,17 +31,12 @@
 
         async function loadChannels() {
             let apiUrl = `${server}/player_api.php?username=${username}&password=${password}&action=get_live_streams`;
-            
-            try {
-                let response = await fetch(apiUrl, {
-                    headers: {
-                        "User-Agent": "VLC/3.0.11 LibVLC/3.0.11"
-                    }
-                });
 
+            try {
+                let response = await fetch(apiUrl);
                 let data = await response.json();
 
-                if (!data || data.length === 0) {
+                if (!data || !Array.isArray(data)) {
                     document.getElementById("channels").innerHTML = "<p>Nenhum canal encontrado.</p>";
                     return;
                 }
@@ -95,6 +51,7 @@
 
                 document.getElementById("channels").innerHTML = channelsHtml;
             } catch (error) {
+                console.error("Erro ao buscar canais:", error);
                 document.getElementById("channels").innerHTML = "<p>Erro ao carregar canais.</p>";
             }
         }
@@ -103,17 +60,12 @@
             let video = document.getElementById("player");
             let channelUrl = `${server}/live/${username}/${password}/${stream_id}.m3u8`;
 
-            // Verifica se HLS.js é suportado
             if (Hls.isSupported()) {
                 if (window.hls) {
                     window.hls.destroy();
                 }
 
-                window.hls = new Hls({ 
-                    xhrSetup: function(xhr) { 
-                        xhr.setRequestHeader("User-Agent", "VLC/3.0.11 LibVLC/3.0.11"); 
-                    }
-                });
+                window.hls = new Hls();
                 window.hls.loadSource(channelUrl);
                 window.hls.attachMedia(video);
             } else {
