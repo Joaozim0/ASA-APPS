@@ -95,20 +95,20 @@
         }
 
         function playChannel(stream_id) {
-            let video = document.getElementById("player");
-            let channelUrl = `${server}/live/${username}/${password}/${stream_id}.m3u8`;
+            const video = document.getElementById("player");
+            const channelUrl = `${server}/live/${username}/${password}/${stream_id}.m3u8`;
 
-            // Remover buffer atrasado para carregar mais rápido
+            // Adicionando configuração personalizada do User-Agent
             if (Hls.isSupported()) {
                 if (window.hls) {
                     window.hls.destroy();
                 }
                 window.hls = new Hls({ 
-                    maxBufferLength: 5,  // Reduzir o buffer para começar a rodar rápido
-                    liveSyncDurationCount: 3,
                     xhrSetup: function (xhr) {
-                        xhr.setRequestHeader("User-Agent", "VLC/3.0.18 LibVLC/3.0.18");
-                    }
+                        xhr.setRequestHeader("User-Agent", "VLC/3.0.18 LibVLC/3.0.18"); // User-Agent atualizado
+                    },
+                    maxBufferLength: 5,  // Reduzir buffer para iniciar mais rápido
+                    liveSyncDurationCount: 3
                 });
                 window.hls.loadSource(channelUrl);
                 window.hls.attachMedia(video);
