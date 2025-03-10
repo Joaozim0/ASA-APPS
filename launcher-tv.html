@@ -64,38 +64,21 @@
     </div>
 
     <script>
-        // URL DA SUA LISTA IPTV
-        const m3uUrl = "https://raw.githubusercontent.com/helenfernanda/gratis/main/iptvlegal.m3u"; 
-        // Se precisar de proxy, use essa versão:
-        // const m3uUrl = "https://corsproxy.io/?https://rebrand.ly/tvmeutedio";
+        // CONFIGURAÇÕES DA SUA LISTA IPTV (Xtream Codes)
+        const server = "http://ct5play.lat";
+        const username = "Dyeimes";
+        const password = "13579111315aa";
+        const apiUrl = `${server}/player_api.php?username=${username}&password=${password}&action=get_live_streams`;
 
         let hls;
 
-        async function loadM3U() {
+        async function loadXtreamCodes() {
             try {
-                let response = await fetch(m3uUrl);
-                if (!response.ok) throw new Error("Erro ao acessar a lista.");
+                let response = await fetch(apiUrl);
+                if (!response.ok) throw new Error("Erro ao acessar a API.");
 
-                let text = await response.text();
-                let lines = text.split("\n");
-                let channels = [];
-
-                for (let i = 0; i < lines.length; i++) {
-                    if (lines[i].startsWith("#EXTINF")) {
-                        let parts = lines[i].split(",");
-                        let name = parts[1]?.trim();
-
-                        let logoMatch = lines[i].match(/tvg-logo="(.*?)"/);
-                        let logo = logoMatch ? logoMatch[1] : "";
-
-                        let url = lines[i + 1]?.trim();
-                        if (url && url.startsWith("http")) {
-                            channels.push({ name, url, logo });
-                        }
-                    }
-                }
-
-                if (channels.length === 0) throw new Error("Nenhum canal encontrado.");
+                let channels = await response.json();
+                if (!channels || channels.length === 0) throw new Error("Nenhum canal encontrado.");
 
                 displayChannels(channels);
             } catch (error) {
@@ -106,14 +89,17 @@
         function displayChannels(channels) {
             let list = document.getElementById("channel-list");
             list.innerHTML = "";
+
             channels.forEach(channel => {
+                let channelUrl = `${server}/live/${username}/${password}/${channel.stream_id}.m3u8`;
+                
                 let div = document.createElement("div");
                 div.className = "channel";
                 div.innerHTML = `
-                    <img src="${channel.logo || 'https://via.placeholder.com/50'}">
+                    <img src="${channel.stream_icon || 'https://via.placeholder.com/50'}">
                     ${channel.name}
                 `;
-                div.onclick = () => playChannel(channel.url);
+                div.onclick = () => playChannel(channelUrl);
                 list.appendChild(div);
             });
         }
@@ -143,7 +129,7 @@
             }
         }
 
-        loadM3U();
+        loadXtreamCodes();
     </script>
 </body>
 </html>
