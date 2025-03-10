@@ -91,7 +91,7 @@
             list.innerHTML = "";
 
             channels.forEach(channel => {
-                let channelUrl = `${server}/live/${username}/${password}/${channel.stream_id}.m3u8`;
+                let channelUrl = `https://corsproxy.io/?${server}/live/${username}/${password}/${channel.stream_id}.m3u8`;
                 
                 let div = document.createElement("div");
                 div.className = "channel";
