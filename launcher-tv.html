@@ -48,40 +48,62 @@
     <video id="player" controls></video>
 </div>
 
-<div id="channel-list"></div>
+<div id="channel-list">Carregando canais...</div>
 
 <script>
-    const username = "35498512";
-    const password = "35685524";
-    const xtreamURL = `http://turbocdn.sbs/player_api.php?username=${username}&password=${password}&action=get_live_streams`;
+    const m3uUrl = "http://turbocdn.sbs/get.php?username=35498512&password=35685524&type=m3u";
 
-    async function fetchChannels() {
+    async function fetchM3U() {
         try {
-            const response = await fetch(xtreamURL);
-            const channels = await response.json();
-            const channelList = document.getElementById("channel-list");
-
-            channels.forEach(channel => {
-                const channelItem = document.createElement("div");
-                channelItem.classList.add("channel");
-                channelItem.textContent = channel.name;
-                channelItem.onclick = () => playChannel(channel.stream_id);
-                channelList.appendChild(channelItem);
-            });
-
+            const response = await fetch(m3uUrl);
+            const m3uText = await response.text();
+            const channels = parseM3U(m3uText);
+            displayChannels(channels);
         } catch (error) {
-            console.error("Erro ao carregar canais:", error);
+            console.error("Erro ao carregar a lista M3U:", error);
             document.getElementById("channel-list").innerHTML = "<p>Erro ao carregar canais.</p>";
         }
     }
 
-    function playChannel(stream_id) {
+    function parseM3U(m3uText) {
+        const lines = m3uText.split("\n");
+        const channels = [];
+        let currentChannel = null;
+
+        lines.forEach(line => {
+            if (line.startsWith("#EXTINF")) {
+                const name = line.split(",")[1].trim();
+                currentChannel = { name };
+            } else if (line.startsWith("http") && currentChannel) {
+                currentChannel.url = line.trim();
+                channels.push(currentChannel);
+                currentChannel = null;
+            }
+        });
+
+        return channels;
+    }
+
+    function displayChannels(channels) {
+        const channelList = document.getElementById("channel-list");
+        channelList.innerHTML = "";
+
+        channels.forEach(channel => {
+            const channelItem = document.createElement("div");
+            channelItem.classList.add("channel");
+            channelItem.textContent = channel.name;
+            channelItem.onclick = () => playChannel(channel.url);
+            channelList.appendChild(channelItem);
+        });
+    }
+
+    function playChannel(url) {
         const player = document.getElementById("player");
-        player.src = `http://turbocdn.sbs/live/${username}/${password}/${stream_id}.m3u8`;
+        player.src = url;
         player.play();
     }
 
-    fetchChannels();
+    fetchM3U();
 </script>
 
 </body>
