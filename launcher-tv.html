@@ -11,26 +11,31 @@
             color: #fff;
             margin: 0;
             padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         #player-container {
-            position: fixed;
-            top: 0;
-            left: 0;
             width: 100%;
-            background-color: #222;
-            padding: 10px;
-            z-index: 1000;
-        }
-        video {
-            width: 100%;
-            height: 250px;
+            max-width: 800px;
+            height: 400px;
             background-color: black;
+            margin-top: 20px;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
         }
         #channel-list {
-            margin-top: 270px;
+            width: 100%;
+            max-width: 800px;
+            margin-top: 10px;
             padding: 10px;
-            max-height: calc(100vh - 270px);
+            max-height: 300px;
             overflow-y: auto;
+            background: #222;
+            border-radius: 5px;
         }
         .channel {
             padding: 10px;
@@ -45,18 +50,18 @@
 <body>
 
 <div id="player-container">
-    <video id="player" controls></video>
+    <iframe id="player" src="" allowfullscreen></iframe>
 </div>
 
 <div id="channel-list">Carregando canais...</div>
 
 <script>
     const m3uUrl = "http://turbocdn.sbs/get.php?username=35498512&password=35685524&type=m3u";
-    const proxyUrl = "https://corsproxy.io/?";
+    const playerUrl = "https://iptv.lui.stream/?url=";
 
     async function fetchM3U() {
         try {
-            const response = await fetch(proxyUrl + encodeURIComponent(m3uUrl));
+            const response = await fetch(m3uUrl);
             const m3uText = await response.text();
             const channels = parseM3U(m3uText);
             displayChannels(channels);
@@ -100,8 +105,7 @@
 
     function playChannel(url) {
         const player = document.getElementById("player");
-        player.src = url;
-        player.play();
+        player.src = playerUrl + encodeURIComponent(url);
     }
 
     fetchM3U();
