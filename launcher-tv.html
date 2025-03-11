@@ -52,10 +52,11 @@
 
 <script>
     const m3uUrl = "http://turbocdn.sbs/get.php?username=35498512&password=35685524&type=m3u";
+    const proxyUrl = "https://corsproxy.io/?";
 
     async function fetchM3U() {
         try {
-            const response = await fetch(m3uUrl);
+            const response = await fetch(proxyUrl + encodeURIComponent(m3uUrl));
             const m3uText = await response.text();
             const channels = parseM3U(m3uText);
             displayChannels(channels);
