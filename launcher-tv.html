@@ -4,120 +4,85 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IPTV Player</title>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; background: #222; color: white; margin: 0; padding: 0; }
-        
-        /* Player fixo no topo */
-        #player-container { 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            background: black; 
-            padding: 10px 0;
-            z-index: 1000; 
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #fff;
+            margin: 0;
+            padding: 0;
         }
-        
-        video { width: 100%; max-height: 300px; }
-
-        /* Lista de canais ajustada para rolar sem mover o player */
-        #channels-container { 
-            margin-top: 320px; /* Deixar espaço para o player fixo */
+        #player-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #222;
             padding: 10px;
+            z-index: 1000;
+        }
+        video {
+            width: 100%;
+            height: 250px;
+            background-color: black;
+        }
+        #channel-list {
+            margin-top: 270px;
+            padding: 10px;
+            max-height: calc(100vh - 270px);
             overflow-y: auto;
         }
-
-        #channels { 
-            display: flex; 
-            flex-wrap: wrap; 
-            justify-content: center; 
+        .channel {
+            padding: 10px;
+            border-bottom: 1px solid #444;
+            cursor: pointer;
         }
-
-        .channel { 
-            cursor: pointer; 
-            padding: 10px; 
-            border: 1px solid white; 
-            margin: 5px; 
-            text-align: center;
-            width: 120px;
-            background: #333; 
-            border-radius: 5px;
-        }
-
-        .channel img { 
-            width: 80px; 
-            height: 80px; 
-            display: block;
-            margin: 0 auto 5px;
+        .channel:hover {
+            background-color: #555;
         }
     </style>
 </head>
 <body>
-    <div id="player-container">
-        <video id="player" controls autoplay></video>
-    </div>
 
-    <div id="channels-container">
-        <h2>Lista de Canais</h2>
-        <div id="channels"></div>
-    </div>
+<div id="player-container">
+    <video id="player" controls></video>
+</div>
 
-    <script>
-        let server = "http://turbocdn.sbs";
-        let username = "35498512";
-        let password = "35685524";
-        let proxyUrl = "http://5.106.6.235:80/?";
+<div id="channel-list"></div>
 
-        async function loadChannels() {
-            let apiUrl = `${server}/player_api.php?username=${username}&password=${password}&action=get_live_streams`;
-            try {
-                let response = await fetch(proxyUrl + apiUrl);
-                let data = await response.json();
+<script>
+    const username = "35498512";
+    const password = "35685524";
+    const xtreamURL = `http://turbocdn.sbs/player_api.php?username=${username}&password=${password}&action=get_live_streams`;
 
-                if (data.length === 0) {
-                    document.getElementById("channels").innerHTML = "<p>Nenhum canal encontrado.</p>";
-                    return;
-                }
+    async function fetchChannels() {
+        try {
+            const response = await fetch(xtreamURL);
+            const channels = await response.json();
+            const channelList = document.getElementById("channel-list");
 
-                let channelsHtml = "";
-                data.forEach(channel => {
-                    channelsHtml += `<div class="channel" onclick="playChannel(${channel.stream_id})">
-                        <img src="${channel.stream_icon || 'https://via.placeholder.com/50'}">
-                        <p>${channel.name}</p>
-                    </div>`;
-                });
+            channels.forEach(channel => {
+                const channelItem = document.createElement("div");
+                channelItem.classList.add("channel");
+                channelItem.textContent = channel.name;
+                channelItem.onclick = () => playChannel(channel.stream_id);
+                channelList.appendChild(channelItem);
+            });
 
-                document.getElementById("channels").innerHTML = channelsHtml;
-            } catch (error) {
-                document.getElementById("channels").innerHTML = "<p>Erro ao carregar canais.</p>";
-            }
+        } catch (error) {
+            console.error("Erro ao carregar canais:", error);
+            document.getElementById("channel-list").innerHTML = "<p>Erro ao carregar canais.</p>";
         }
+    }
 
-        function playChannel(stream_id) {
-            const video = document.getElementById("player");
-            const channelUrl = `${server}/live/${username}/${password}/${stream_id}.m3u8`;
+    function playChannel(stream_id) {
+        const player = document.getElementById("player");
+        player.src = `http://turbocdn.sbs/live/${username}/${password}/${stream_id}.m3u8`;
+        player.play();
+    }
 
-            // Adicionando configuração personalizada do User-Agent
-            if (Hls.isSupported()) {
-                if (window.hls) {
-                    window.hls.destroy();
-                }
-                window.hls = new Hls({ 
-                    xhrSetup: function (xhr) {
-                        xhr.setRequestHeader("User-Agent", "VLC/3.0.18 LibVLC/3.0.18"); // User-Agent atualizado
-                    },
-                    maxBufferLength: 5,  // Reduzir buffer para iniciar mais rápido
-                    liveSyncDurationCount: 3
-                });
-                window.hls.loadSource(channelUrl);
-                window.hls.attachMedia(video);
-            } else {
-                video.src = proxyUrl + channelUrl;
-            }
-        }
+    fetchChannels();
+</script>
 
-        loadChannels();
-    </script>
 </body>
 </html>
