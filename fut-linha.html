@@ -37,22 +37,35 @@
             display: none;
             border-radius: 10px;
         }
+        #video-container {
+            display: none;
+        }
+        #video-controls {
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
 
     <h2>Ferramenta VAR - Linha de Impedimento</h2>
 
-    <p>1️⃣ Faça o upload da imagem do lance.<br>
-       2️⃣ Escolha quantas linhas deseja desenhar.<br>
-       3️⃣ A linha vermelha e a principal não a seguanda linha
-          pode selecionar cor da linha.<br>
-       4️⃣ Escolha o lado do campo para análise.<br>
-       5️⃣ Clique na imagem para traçar as linhas.<br>
-       6️⃣ Ative ou desative a exibição do impedimento.</p>
+    <p>1️⃣ Faça o upload da imagem ou vídeo.<br>
+       2️⃣ Use os controles para pausar no momento exato.<br>
+       3️⃣ Clique na tela para desenhar as linhas.<br>
+       4️⃣ Ajuste o lado do campo e veja se há impedimento.</p>
 
-    <input type="file" id="upload" accept="image/*">
+    <input type="file" id="upload" accept="image/*,video/*">
     
+    <div id="video-container">
+        <video id="video" width="600" controls></video>
+        <div id="video-controls">
+            <button onclick="playPause()">▶️ / ⏸</button>
+            <button onclick="rewind()">⏪ Voltar</button>
+            <button onclick="fastForward()">⏩ Avançar</button>
+            <input type="range" id="seekBar" min="0" value="0" step="0.1" onchange="seekVideo()">
+        </div>
+    </div>
+
     <label for="lineCount">Linhas:</label>
     <select id="lineCount">
         <option value="1">1 Linha</option>
@@ -76,14 +89,13 @@
     <button onclick="clearLines()">Limpar Tudo</button>
     
     <div id="canvas-container">
-        <img id="uploaded-image" style="display: none;">
         <canvas id="draw-canvas"></canvas>
         <div id="impedimento-texto"></div>
     </div>
 
     <script>
         const upload = document.getElementById("upload");
-        const img = document.getElementById("uploaded-image");
+        const video = document.getElementById("video");
         const canvas = document.getElementById("draw-canvas");
         const ctx = canvas.getContext("2d");
         const lineCountSelect = document.getElementById("lineCount");
@@ -91,25 +103,40 @@
         const fieldSideSelect = document.getElementById("fieldSide");
         const impedimentoTexto = document.getElementById("impedimento-texto");
         const showImpedimentoCheckbox = document.getElementById("showImpedimento");
+        const videoContainer = document.getElementById("video-container");
+        const seekBar = document.getElementById("seekBar");
         let lines = [];
         let maxLines = 2;
+        let isVideo = false;
 
         upload.addEventListener("change", function(event) {
             const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    img.src = e.target.result;
-                    img.style.display = "block";
-                    img.onload = function() {
-                        canvas.width = img.width;
-                        canvas.height = img.height;
-                        document.getElementById("canvas-container").style.width = img.width + "px";
-                        document.getElementById("canvas-container").style.height = img.height + "px";
-                        clearLines();
-                    };
+            if (!file) return;
+
+            const url = URL.createObjectURL(file);
+            if (file.type.startsWith("video")) {
+                isVideo = true;
+                video.src = url;
+                video.style.display = "block";
+                videoContainer.style.display = "block";
+                video.addEventListener("loadedmetadata", () => {
+                    seekBar.max = video.duration;
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    document.getElementById("canvas-container").style.width = video.videoWidth + "px";
+                    document.getElementById("canvas-container").style.height = video.videoHeight + "px";
+                    clearLines();
+                });
+            } else {
+                isVideo = false;
+                const img = new Image();
+                img.src = url;
+                img.onload = function() {
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.drawImage(img, 0, 0);
+                    clearLines();
                 };
-                reader.readAsDataURL(file);
             }
         });
 
@@ -137,7 +164,7 @@
 
         function drawLines() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+            if (isVideo) ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
             lines.forEach(line => {
                 ctx.beginPath();
                 ctx.moveTo(line.x, 0);
@@ -146,7 +173,6 @@
                 ctx.lineWidth = 3;
                 ctx.stroke();
             });
-
             checkImpedimento();
         }
 
@@ -161,8 +187,8 @@
             const atacandoParaDireita = fieldSideSelect.value === "direita";
 
             let impedido = atacandoParaDireita 
-                ? impedidoX > defensorX  // Se atacando para direita, impedido se X do atacante for maior que o do defensor
-                : impedidoX < defensorX; // Se atacando para esquerda, impedido se X do atacante for menor que o do defensor
+                ? impedidoX > defensorX  
+                : impedidoX < defensorX;
 
             if (showImpedimentoCheckbox.checked) {
                 impedimentoTexto.style.display = "block";
@@ -185,6 +211,29 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             impedimentoTexto.style.display = "none";
         }
+
+        function playPause() {
+            if (video.paused) video.play();
+            else video.pause();
+        }
+
+        function rewind() {
+            video.currentTime -= 1;
+        }
+
+        function fastForward() {
+            video.currentTime += 1;
+        }
+
+        function seekVideo() {
+            video.currentTime = seekBar.value;
+        }
+
+        video.addEventListener("timeupdate", () => {
+            seekBar.value = video.currentTime;
+            drawLines();
+        });
+
     </script>
 
 </body>
