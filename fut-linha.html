@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Impedimento VAR</title>
+    <title>VAR - Linha de Impedimento</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -26,7 +26,7 @@
 </head>
 <body>
 
-    <h2>Ferramenta de Linha de Impedimento</h2>
+    <h2>Ferramenta VAR - Linha de Impedimento</h2>
     <input type="file" id="upload" accept="image/*">
     <button onclick="clearLines()">Limpar Linhas</button>
     
@@ -40,7 +40,6 @@
         const img = document.getElementById("uploaded-image");
         const canvas = document.getElementById("draw-canvas");
         const ctx = canvas.getContext("2d");
-        let drawing = false;
         let lines = [];
 
         upload.addEventListener("change", function(event) {
@@ -61,38 +60,35 @@
             }
         });
 
-        canvas.addEventListener("mousedown", (event) => {
-            drawing = true;
-            const rect = canvas.getBoundingClientRect();
-            const startX = event.clientX - rect.left;
-            const startY = event.clientY - rect.top;
-            lines.push({ startX, startY, endX: startX, endY: startY });
+        canvas.addEventListener("click", (event) => {
+            if (lines.length < 2) { 
+                const rect = canvas.getBoundingClientRect();
+                const x = event.clientX - rect.left;
+                lines.push(x);
+                drawLines();
+            }
         });
 
-        canvas.addEventListener("mousemove", (event) => {
-            if (!drawing) return;
-            const rect = canvas.getBoundingClientRect();
-            const endX = event.clientX - rect.left;
-            const endY = event.clientY - rect.top;
-            lines[lines.length - 1].endX = endX;
-            lines[lines.length - 1].endY = endY;
-            redrawCanvas();
-        });
-
-        canvas.addEventListener("mouseup", () => {
-            drawing = false;
-        });
-
-        function redrawCanvas() {
+        function drawLines() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            lines.forEach(line => {
+
+            if (lines.length > 0) {
                 ctx.beginPath();
-                ctx.moveTo(line.startX, line.startY);
-                ctx.lineTo(line.endX, line.endY);
-                ctx.strokeStyle = "red";
+                ctx.moveTo(lines[0], 0);
+                ctx.lineTo(lines[0], canvas.height);
+                ctx.strokeStyle = "red";  // Linha do impedido
                 ctx.lineWidth = 3;
                 ctx.stroke();
-            });
+            }
+
+            if (lines.length > 1) {
+                ctx.beginPath();
+                ctx.moveTo(lines[1], 0);
+                ctx.lineTo(lines[1], canvas.height);
+                ctx.strokeStyle = "blue";  // Linha do defensor
+                ctx.lineWidth = 3;
+                ctx.stroke();
+            }
         }
 
         function clearLines() {
