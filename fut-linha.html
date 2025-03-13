@@ -161,8 +161,8 @@
             const atacandoParaDireita = fieldSideSelect.value === "direita";
 
             let impedido = atacandoParaDireita 
-                ? impedidoX < defensorX  
-                : impedidoX > defensorX; 
+                ? impedidoX > defensorX  // Se atacando para direita, impedido se X do atacante for maior que o do defensor
+                : impedidoX < defensorX; // Se atacando para esquerda, impedido se X do atacante for menor que o do defensor
 
             if (showImpedimentoCheckbox.checked) {
                 impedimentoTexto.style.display = "block";
