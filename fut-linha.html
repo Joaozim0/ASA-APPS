@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impedimento VAR</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #canvas-container {
+            position: relative;
+            display: inline-block;
+            border: 1px solid #000;
+        }
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        input, button {
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Ferramenta de Linha de Impedimento</h2>
+    <input type="file" id="upload" accept="image/*">
+    <button onclick="clearLines()">Limpar Linhas</button>
+    
+    <div id="canvas-container">
+        <img id="uploaded-image" style="display: none;">
+        <canvas id="draw-canvas"></canvas>
+    </div>
+
+    <script>
+        const upload = document.getElementById("upload");
+        const img = document.getElementById("uploaded-image");
+        const canvas = document.getElementById("draw-canvas");
+        const ctx = canvas.getContext("2d");
+        let drawing = false;
+        let lines = [];
+
+        upload.addEventListener("change", function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    img.src = e.target.result;
+                    img.style.display = "block";
+                    img.onload = function() {
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        document.getElementById("canvas-container").style.width = img.width + "px";
+                        document.getElementById("canvas-container").style.height = img.height + "px";
+                    };
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        canvas.addEventListener("mousedown", (event) => {
+            drawing = true;
+            const rect = canvas.getBoundingClientRect();
+            const startX = event.clientX - rect.left;
+            const startY = event.clientY - rect.top;
+            lines.push({ startX, startY, endX: startX, endY: startY });
+        });
+
+        canvas.addEventListener("mousemove", (event) => {
+            if (!drawing) return;
+            const rect = canvas.getBoundingClientRect();
+            const endX = event.clientX - rect.left;
+            const endY = event.clientY - rect.top;
+            lines[lines.length - 1].endX = endX;
+            lines[lines.length - 1].endY = endY;
+            redrawCanvas();
+        });
+
+        canvas.addEventListener("mouseup", () => {
+            drawing = false;
+        });
+
+        function redrawCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            lines.forEach(line => {
+                ctx.beginPath();
+                ctx.moveTo(line.startX, line.startY);
+                ctx.lineTo(line.endX, line.endY);
+                ctx.strokeStyle = "red";
+                ctx.lineWidth = 3;
+                ctx.stroke();
+            });
+        }
+
+        function clearLines() {
+            lines = [];
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+    </script>
+
+</body>
+</html>
