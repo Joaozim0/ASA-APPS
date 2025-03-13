@@ -124,7 +124,7 @@
         });
 
         showImpedimentoCheckbox.addEventListener("change", function() {
-            impedimentoTexto.style.display = this.checked ? "block" : "none";
+            checkImpedimento();
         });
 
         function drawLines() {
@@ -160,6 +160,8 @@
                 impedimentoTexto.style.display = "block";
                 impedimentoTexto.textContent = impedido ? "⚠️ IMPEDIMENTO ⚠️" : "✅ NÃO IMPEDIMENTO ✅";
                 impedimentoTexto.style.color = impedido ? "red" : "green";
+            } else {
+                impedimentoTexto.style.display = "none";
             }
         }
 
