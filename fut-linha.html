@@ -19,15 +19,51 @@
             top: 0;
             left: 0;
         }
-        input, button {
+        input, button, select {
             margin: 10px;
+            padding: 5px;
+            font-size: 16px;
+        }
+        #impedimento-texto {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 10px;
+            display: none;
         }
     </style>
 </head>
 <body>
 
     <h2>Ferramenta VAR - Linha de Impedimento</h2>
+
+    <p>1️⃣ Faça o upload da imagem do lance.<br>
+       2️⃣ Escolha quantas linhas deseja desenhar.<br>
+       3️⃣ Selecione a cor das linhas.<br>
+       4️⃣ Escolha o lado do campo para análise.<br>
+       5️⃣ Clique na imagem para traçar as linhas.<br>
+       6️⃣ Ative ou desative a exibição do impedimento.</p>
+
     <input type="file" id="upload" accept="image/*">
+    
+    <label for="lineCount">Linhas:</label>
+    <select id="lineCount">
+        <option value="1">1 Linha</option>
+        <option value="2" selected>2 Linhas</option>
+        <option value="3">3 Linhas</option>
+    </select>
+
+    <label for="lineColor">Cor:</label>
+    <input type="color" id="lineColor" value="#ff0000">
+
+    <label for="fieldSide">Lado do Campo:</label>
+    <select id="fieldSide">
+        <option value="direita">Atacando para Direita</option>
+        <option value="esquerda">Atacando para Esquerda</option>
+    </select>
+
+    <label for="showImpedimento">Mostrar Impedimento:</label>
+    <input type="checkbox" id="showImpedimento" checked>
+
     <button onclick="clearLines()">Limpar Linhas</button>
     
     <div id="canvas-container">
@@ -35,12 +71,20 @@
         <canvas id="draw-canvas"></canvas>
     </div>
 
+    <div id="impedimento-texto"></div>
+
     <script>
         const upload = document.getElementById("upload");
         const img = document.getElementById("uploaded-image");
         const canvas = document.getElementById("draw-canvas");
         const ctx = canvas.getContext("2d");
+        const lineCountSelect = document.getElementById("lineCount");
+        const lineColorPicker = document.getElementById("lineColor");
+        const fieldSideSelect = document.getElementById("fieldSide");
+        const impedimentoTexto = document.getElementById("impedimento-texto");
+        const showImpedimentoCheckbox = document.getElementById("showImpedimento");
         let lines = [];
+        let maxLines = 2; // Padrão: 2 linhas
 
         upload.addEventListener("change", function(event) {
             const file = event.target.files[0];
@@ -54,6 +98,7 @@
                         canvas.height = img.height;
                         document.getElementById("canvas-container").style.width = img.width + "px";
                         document.getElementById("canvas-container").style.height = img.height + "px";
+                        clearLines(); // Limpa as linhas ao trocar a imagem
                     };
                 };
                 reader.readAsDataURL(file);
@@ -61,39 +106,67 @@
         });
 
         canvas.addEventListener("click", (event) => {
-            if (lines.length < 2) { 
+            if (lines.length < maxLines) { 
                 const rect = canvas.getBoundingClientRect();
                 const x = event.clientX - rect.left;
-                lines.push(x);
+                lines.push({ x, color: lineColorPicker.value });
                 drawLines();
             }
+        });
+
+        lineCountSelect.addEventListener("change", function() {
+            maxLines = parseInt(this.value);
+            clearLines(); // Limpa as linhas ao mudar o número
+        });
+
+        fieldSideSelect.addEventListener("change", function() {
+            checkImpedimento(); // Atualiza a verificação quando o lado do campo mudar
+        });
+
+        showImpedimentoCheckbox.addEventListener("change", function() {
+            impedimentoTexto.style.display = this.checked ? "block" : "none";
         });
 
         function drawLines() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            if (lines.length > 0) {
+            lines.forEach(line => {
                 ctx.beginPath();
-                ctx.moveTo(lines[0], 0);
-                ctx.lineTo(lines[0], canvas.height);
-                ctx.strokeStyle = "red";  // Linha do impedido
+                ctx.moveTo(line.x, 0);
+                ctx.lineTo(line.x, canvas.height);
+                ctx.strokeStyle = line.color;
                 ctx.lineWidth = 3;
                 ctx.stroke();
+            });
+
+            checkImpedimento();
+        }
+
+        function checkImpedimento() {
+            if (lines.length < 2) {
+                impedimentoTexto.style.display = "none";
+                return;
             }
 
-            if (lines.length > 1) {
-                ctx.beginPath();
-                ctx.moveTo(lines[1], 0);
-                ctx.lineTo(lines[1], canvas.height);
-                ctx.strokeStyle = "blue";  // Linha do defensor
-                ctx.lineWidth = 3;
-                ctx.stroke();
+            const impedidoX = lines[0].x;
+            const defensorX = lines[1].x;
+            const atacandoParaDireita = fieldSideSelect.value === "direita";
+
+            let impedido = atacandoParaDireita 
+                ? impedidoX < defensorX  // Impedimento se a linha vermelha estiver à frente
+                : impedidoX > defensorX; // Inverte a lógica se atacando para esquerda
+
+            if (showImpedimentoCheckbox.checked) {
+                impedimentoTexto.style.display = "block";
+                impedimentoTexto.textContent = impedido ? "⚠️ IMPEDIMENTO ⚠️" : "✅ NÃO IMPEDIMENTO ✅";
+                impedimentoTexto.style.color = impedido ? "red" : "green";
             }
         }
 
         function clearLines() {
             lines = [];
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            impedimentoTexto.style.display = "none";
         }
     </script>
 
