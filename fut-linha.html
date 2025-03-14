@@ -26,7 +26,7 @@
         }
         #impedimento-texto {
             position: absolute;
-            top: 50%;
+            top: 10%;
             left: 50%;
             transform: translate(-50%, -50%);
             font-size: 30px;
@@ -49,11 +49,6 @@
 
     <h2>Ferramenta VAR - Linha de Impedimento</h2>
 
-    <p>1️⃣ Faça o upload da imagem ou vídeo.<br>
-       2️⃣ Use os controles para pausar no momento exato.<br>
-       3️⃣ Clique na tela para desenhar as linhas.<br>
-       4️⃣ Ajuste o lado do campo e veja se há impedimento.</p>
-
     <input type="file" id="upload" accept="image/*,video/*">
     
     <div id="video-container">
@@ -66,24 +61,8 @@
         </div>
     </div>
 
-    <label for="lineCount">Linhas:</label>
-    <select id="lineCount">
-        <option value="1">1 Linha</option>
-        <option value="2" selected>2 Linhas</option>
-        <option value="3">3 Linhas</option>
-    </select>
-
-    <label for="lineColor">Cor:</label>
+    <label for="lineColor">Cor da Linha:</label>
     <input type="color" id="lineColor" value="#ff0000">
-
-    <label for="fieldSide">Lado do Campo:</label>
-    <select id="fieldSide">
-        <option value="direita">Atacando para Direita</option>
-        <option value="esquerda">Atacando para Esquerda</option>
-    </select>
-
-    <label for="showImpedimento">Mostrar Impedimento:</label>
-    <input type="checkbox" id="showImpedimento" checked>
 
     <button onclick="clearLastLine()">Apagar Última Linha</button>
     <button onclick="clearLines()">Limpar Tudo</button>
@@ -93,21 +72,22 @@
         <div id="impedimento-texto"></div>
     </div>
 
+    <button onclick="downloadImage()">📸 Baixar Imagem</button>
+    <button onclick="startRecording()">🎥 Gravar Vídeo</button>
+    <button onclick="stopRecording()">⏹️ Parar e Baixar Vídeo</button>
+
     <script>
         const upload = document.getElementById("upload");
         const video = document.getElementById("video");
         const canvas = document.getElementById("draw-canvas");
         const ctx = canvas.getContext("2d");
-        const lineCountSelect = document.getElementById("lineCount");
-        const lineColorPicker = document.getElementById("lineColor");
-        const fieldSideSelect = document.getElementById("fieldSide");
         const impedimentoTexto = document.getElementById("impedimento-texto");
-        const showImpedimentoCheckbox = document.getElementById("showImpedimento");
         const videoContainer = document.getElementById("video-container");
         const seekBar = document.getElementById("seekBar");
         let lines = [];
-        let maxLines = 2;
         let isVideo = false;
+        let mediaRecorder;
+        let recordedChunks = [];
 
         upload.addEventListener("change", function(event) {
             const file = event.target.files[0];
@@ -117,14 +97,11 @@
             if (file.type.startsWith("video")) {
                 isVideo = true;
                 video.src = url;
-                video.style.display = "block";
                 videoContainer.style.display = "block";
                 video.addEventListener("loadedmetadata", () => {
                     seekBar.max = video.duration;
                     canvas.width = video.videoWidth;
                     canvas.height = video.videoHeight;
-                    document.getElementById("canvas-container").style.width = video.videoWidth + "px";
-                    document.getElementById("canvas-container").style.height = video.videoHeight + "px";
                     clearLines();
                 });
             } else {
@@ -141,25 +118,10 @@
         });
 
         canvas.addEventListener("click", (event) => {
-            if (lines.length < maxLines) { 
-                const rect = canvas.getBoundingClientRect();
-                const x = event.clientX - rect.left;
-                lines.push({ x, color: lineColorPicker.value });
-                drawLines();
-            }
-        });
-
-        lineCountSelect.addEventListener("change", function() {
-            maxLines = parseInt(this.value);
-            clearLines();
-        });
-
-        fieldSideSelect.addEventListener("change", function() {
-            checkImpedimento();
-        });
-
-        showImpedimentoCheckbox.addEventListener("change", function() {
-            checkImpedimento();
+            const rect = canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            lines.push({ x, color: document.getElementById("lineColor").value });
+            drawLines();
         });
 
         function drawLines() {
@@ -173,30 +135,6 @@
                 ctx.lineWidth = 3;
                 ctx.stroke();
             });
-            checkImpedimento();
-        }
-
-        function checkImpedimento() {
-            if (lines.length < 2) {
-                impedimentoTexto.style.display = "none";
-                return;
-            }
-
-            const impedidoX = lines[0].x;
-            const defensorX = lines[1].x;
-            const atacandoParaDireita = fieldSideSelect.value === "direita";
-
-            let impedido = atacandoParaDireita 
-                ? impedidoX > defensorX  
-                : impedidoX < defensorX;
-
-            if (showImpedimentoCheckbox.checked) {
-                impedimentoTexto.style.display = "block";
-                impedimentoTexto.textContent = impedido ? "⚠️ IMPEDIMENTO ⚠️" : "✅ NÃO IMPEDIMENTO ✅";
-                impedimentoTexto.style.color = impedido ? "red" : "green";
-            } else {
-                impedimentoTexto.style.display = "none";
-            }
         }
 
         function clearLastLine() {
@@ -209,7 +147,37 @@
         function clearLines() {
             lines = [];
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            impedimentoTexto.style.display = "none";
+        }
+
+        function downloadImage() {
+            const link = document.createElement("a");
+            link.download = "linha_impedimento.png";
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+        }
+
+        function startRecording() {
+            recordedChunks = [];
+            const stream = canvas.captureStream(30);
+            mediaRecorder = new MediaRecorder(stream, { mimeType: "video/webm" });
+
+            mediaRecorder.ondataavailable = (event) => {
+                if (event.data.size > 0) recordedChunks.push(event.data);
+            };
+
+            mediaRecorder.start();
+        }
+
+        function stopRecording() {
+            mediaRecorder.stop();
+            mediaRecorder.onstop = () => {
+                const blob = new Blob(recordedChunks, { type: "video/webm" });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement("a");
+                link.href = url;
+                link.download = "linha_impedimento.webm";
+                link.click();
+            };
         }
 
         function playPause() {
