@@ -15,10 +15,10 @@
         }
 
         .container {
-            margin-top: 50px;
+            margin-top: 20px;
         }
 
-        input {
+        input, select {
             padding: 10px;
             font-size: 16px;
             margin-bottom: 10px;
@@ -39,31 +39,36 @@
             background-color: white;
             border-radius: 10px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
 
         .text {
             font-size: 50px;
             font-weight: bold;
-            color: white;
             text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
-            background: linear-gradient(to right, #6a11cb, #2575fc);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         .reflection {
             font-size: 50px;
             font-weight: bold;
-            color: rgba(255, 255, 255, 0.3);
             transform: scaleY(-1);
             margin-top: -10px;
-            opacity: 0.5;
+            opacity: 0.3;
+            filter: blur(2px);
+        }
+
+        .icon {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <input type="text" id="textInput" placeholder="Digite o nome">
+        <input type="color" id="colorInput" value="#6a11cb">
+        <input type="file" id="iconInput" accept="image/*">
         <button onclick="gerarImagem()">Gerar Nome</button>
         <button onclick="baixarImagem()">Baixar Imagem</button>
         <div id="imageContainer"></div>
@@ -72,17 +77,37 @@
     <script>
         function gerarImagem() {
             let nome = document.getElementById("textInput").value;
+            let cor = document.getElementById("colorInput").value;
             let container = document.getElementById("imageContainer");
+            let iconInput = document.getElementById("iconInput");
+            let iconURL = "";
 
             if (nome.trim() === "") {
                 alert("Digite um nome!");
                 return;
             }
 
+            // Se um ícone foi selecionado, pega a URL dele
+            if (iconInput.files.length > 0) {
+                let reader = new FileReader();
+                reader.onload = function (e) {
+                    iconURL = e.target.result;
+                    atualizarImagem(nome, cor, iconURL);
+                };
+                reader.readAsDataURL(iconInput.files[0]);
+            } else {
+                atualizarImagem(nome, cor, "");
+            }
+        }
+
+        function atualizarImagem(nome, cor, iconURL) {
+            let container = document.getElementById("imageContainer");
+
             container.innerHTML = `
                 <div id="imagemGerada" class="image-box">
-                    <div class="text">${nome}</div>
-                    <div class="reflection">${nome}</div>
+                    ${iconURL ? `<img src="${iconURL}" class="icon">` : ""}
+                    <div class="text" style="color: ${cor};">${nome}</div>
+                    <div class="reflection" style="color: ${cor};">${nome}</div>
                 </div>
             `;
         }
