@@ -1,156 +1,150 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerador de Nome com Reflexo</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f5f5f5;
-            margin: 0;
-            padding: 20px;
-        }
-
-        .container {
-            margin-top: 20px;
-        }
-
-        input, select {
-            padding: 10px;
-            font-size: 16px;
-            margin-bottom: 10px;
-        }
-
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            margin: 5px;
-        }
-
-        .image-box {
-            display: inline-block;
-            position: relative;
-            padding: 20px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        .text-container, .reflection {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .text {
-            font-size: 50px;
-            font-weight: bold;
-            text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
-        }
-
-        .reflection {
-            transform: scaleY(-1);
-            filter: blur(2px);
-            margin-top: -10px;
-        }
-
-        .icon {
-            width: 60px;
-            height: 60px;
-        }
-
-        .icon-reflection {
-            width: 60px;
-            height: 60px;
-            transform: scaleY(-1);
-            filter: blur(2px);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerador de Nome com Reflexo e Fundo Transparente</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      margin-top: 20px;
+    }
+    input, select, label {
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      margin: 5px;
+    }
+    /* A "image-box" agora não possui fundo (transparente) e sem bordas extras */
+    .image-box {
+      display: inline-block;
+      position: relative;
+      /* Sem padding extra para ajustar ao tamanho do conteúdo */
+      background-color: transparent;
+      text-align: center;
+    }
+    /* Container para o ícone e o nome (lado a lado) */
+    .text-container, .reflection {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .text {
+      font-size: 50px;
+      font-weight: bold;
+      text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+    }
+    /* Reflexo com efeito fade (usando opacidade ajustável e blur) */
+    .reflection {
+      transform: scaleY(-1);
+      filter: blur(2px);
+      margin-top: -10px;
+    }
+    .icon {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+    }
+    .icon-reflection {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+      transform: scaleY(-1);
+      filter: blur(2px);
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <input type="text" id="textInput" placeholder="Digite o nome">
-        <input type="color" id="colorInput" value="#6a11cb">
-        <input type="file" id="iconInput" accept="image/*">
-        <br>
-        <label for="reflectionSlider">Ajustar Reflexo:</label>
-        <input type="range" id="reflectionSlider" min="0" max="1" step="0.1" value="0.3" oninput="atualizarImagem()">
-        <span id="reflectionValue">30%</span>
-        <br>
-        <button onclick="gerarImagem()">Gerar Nome</button>
-        <button onclick="baixarImagem()">Baixar Imagem</button>
-        <div id="imageContainer"></div>
-    </div>
+  <div class="container">
+    <input type="text" id="textInput" placeholder="Digite o nome">
+    <input type="color" id="colorInput" value="#6a11cb">
+    <input type="file" id="iconInput" accept="image/*">
+    <br>
+    <label for="reflectionSlider">Ajustar Reflexo:</label>
+    <input type="range" id="reflectionSlider" min="0" max="1" step="0.1" value="0.3" oninput="atualizarImagem()">
+    <span id="reflectionValue">30%</span>
+    <br>
+    <button onclick="gerarImagem()">Gerar Nome</button>
+    <button onclick="baixarImagem()">Baixar Imagem</button>
+    <div id="imageContainer" style="margin-top:20px;"></div>
+  </div>
 
-    <script>
-        let iconURL = "";
+  <script>
+    let iconURL = "";
 
-        function gerarImagem() {
-            let nome = document.getElementById("textInput").value;
-            let cor = document.getElementById("colorInput").value;
-            let iconInput = document.getElementById("iconInput");
+    function gerarImagem() {
+      let nome = document.getElementById("textInput").value;
+      let cor = document.getElementById("colorInput").value;
+      let iconInput = document.getElementById("iconInput");
 
-            if (nome.trim() === "") {
-                alert("Digite um nome!");
-                return;
-            }
+      if (nome.trim() === "") {
+        alert("Digite um nome!");
+        return;
+      }
 
-            if (iconInput.files.length > 0) {
-                let reader = new FileReader();
-                reader.onload = function (e) {
-                    iconURL = e.target.result;
-                    atualizarImagem();
-                };
-                reader.readAsDataURL(iconInput.files[0]);
-            } else {
-                iconURL = "";
-                atualizarImagem();
-            }
-        }
+      // Se houver ícone selecionado, carrega-o; senão, continua sem ícone
+      if (iconInput.files.length > 0) {
+        let reader = new FileReader();
+        reader.onload = function (e) {
+          iconURL = e.target.result;
+          atualizarImagem();
+        };
+        reader.readAsDataURL(iconInput.files[0]);
+      } else {
+        iconURL = "";
+        atualizarImagem();
+      }
+    }
 
-        function atualizarImagem() {
-            let nome = document.getElementById("textInput").value;
-            let cor = document.getElementById("colorInput").value;
-            let reflectionOpacity = document.getElementById("reflectionSlider").value;
-            let container = document.getElementById("imageContainer");
+    function atualizarImagem() {
+      let nome = document.getElementById("textInput").value;
+      let cor = document.getElementById("colorInput").value;
+      let reflectionOpacity = document.getElementById("reflectionSlider").value;
+      let container = document.getElementById("imageContainer");
+      
+      // Atualiza o valor exibido do slider (em porcentagem)
+      document.getElementById("reflectionValue").innerText = Math.round(reflectionOpacity * 100) + "%";
 
-            document.getElementById("reflectionValue").innerText = Math.round(reflectionOpacity * 100) + "%";
+      container.innerHTML = `
+        <div id="imagemGerada" class="image-box">
+          <div class="text-container">
+            ${iconURL ? `<img src="${iconURL}" class="icon">` : ""}
+            <div class="text" style="color: ${cor};">${nome}</div>
+          </div>
+          <div class="reflection" style="opacity: ${reflectionOpacity};">
+            ${iconURL ? `<img src="${iconURL}" class="icon-reflection">` : ""}
+            <div class="text" style="color: ${cor}; opacity: ${reflectionOpacity};">${nome}</div>
+          </div>
+        </div>
+      `;
+    }
 
-            container.innerHTML = `
-                <div id="imagemGerada" class="image-box">
-                    <div class="text-container">
-                        ${iconURL ? `<img src="${iconURL}" class="icon">` : ""}
-                        <div class="text" style="color: ${cor};">${nome}</div>
-                    </div>
-                    <div class="reflection" style="opacity: ${reflectionOpacity};">
-                        ${iconURL ? `<img src="${iconURL}" class="icon-reflection" style="opacity: ${reflectionOpacity};">` : ""}
-                        <div class="text" style="color: ${cor}; opacity: ${reflectionOpacity};">${nome}</div>
-                    </div>
-                </div>
-            `;
-        }
-
-        function baixarImagem() {
-            let imagem = document.getElementById("imagemGerada");
-
-            if (!imagem) {
-                alert("Gere um nome antes de baixar!");
-                return;
-            }
-
-            html2canvas(imagem).then(canvas => {
-                let link = document.createElement("a");
-                link.href = canvas.toDataURL("image/png");
-                link.download = "nome_gerado.png";
-                link.click();
-            });
-        }
-    </script>
+    function baixarImagem() {
+      let imagem = document.getElementById("imagemGerada");
+      if (!imagem) {
+        alert("Gere um nome antes de baixar!");
+        return;
+      }
+      html2canvas(imagem, { backgroundColor: null }).then(canvas => {
+        let link = document.createElement("a");
+        link.href = canvas.toDataURL("image/png");
+        link.download = "nome_gerado.png";
+        link.click();
+      });
+    }
+  </script>
 </body>
 </html>
