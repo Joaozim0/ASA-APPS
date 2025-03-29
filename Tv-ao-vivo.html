@@ -1,155 +1,107 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ASA APPS - IPTV Player</title>
-
-    <!-- Video.js -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/video.js/8.3.0/video-js.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/8.3.0/video.min.js"></script>
-    
-    <!-- Suporte a HLS no Video.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.15.0/videojs-contrib-hls.min.js"></script>
-
+    <title>Gerador de Nome com Reflexo</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: white;
             text-align: center;
+            background-color: #f5f5f5;
             margin: 0;
-            padding: 0;
+            padding: 20px;
         }
-        #player-container {
-            width: 80%;
-            max-width: 800px;
-            margin: 20px auto;
-            background: black;
+
+        .container {
+            margin-top: 50px;
+        }
+
+        input {
             padding: 10px;
-            border-radius: 10px;
+            font-size: 16px;
+            margin-bottom: 10px;
         }
-        .video-js {
-            width: 100%;
-            border-radius: 5px;
-        }
-        #channel-list {
-            max-width: 800px;
-            margin: 20px auto;
-            text-align: left;
-            background: #222;
-            padding: 10px;
-            border-radius: 10px;
-            overflow-y: auto;
-            max-height: 500px;
-        }
-        .channel {
-            display: flex;
-            align-items: center;
-            padding: 10px;
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
             cursor: pointer;
-            border-bottom: 1px solid #333;
+            margin: 5px;
         }
-        .channel:hover {
-            background: #333;
+
+        .image-box {
+            position: relative;
+            display: inline-block;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
         }
-        .channel img {
-            width: 50px;
-            height: 50px;
-            margin-right: 10px;
-            border-radius: 5px;
+
+        .text {
+            font-size: 50px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .reflection {
+            font-size: 50px;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 0.3);
+            transform: scaleY(-1);
+            margin-top: -10px;
+            opacity: 0.5;
         }
     </style>
 </head>
 <body>
-    <h1>ASA APPS - IPTV Player</h1>
-
-    <!-- Player -->
-    <div id="player-container">
-        <video id="player" class="video-js vjs-default-skin" controls>
-            <source src="" type="application/x-mpegURL">
-        </video>
-    </div>
-
-    <!-- Lista de canais -->
-    <div id="channel-list" aria-label="Lista de canais">
-        <p>Carregando canais...</p>
+    <div class="container">
+        <input type="text" id="textInput" placeholder="Digite o nome">
+        <button onclick="gerarImagem()">Gerar Nome</button>
+        <button onclick="baixarImagem()">Baixar Imagem</button>
+        <div id="imageContainer"></div>
     </div>
 
     <script>
-        const m3uUrl = "https://raw.githubusercontent.com/Ramys/Iptv-Brasil-2025/refs/heads/master/Lista%20BR03.m3u8";
-        let player;
+        function gerarImagem() {
+            let nome = document.getElementById("textInput").value;
+            let container = document.getElementById("imageContainer");
 
-        // Inicializar o player Video.js com suporte a HLS
-        function initializePlayer() {
-            player = videojs('player', {
-                responsive: true,
-                fluid: true,
-                liveui: true
-            });
-
-            if (!videojs.browser.IS_SAFARI) {
-                player.tech(true).hls.xhr.beforeRequest = function (options) {
-                    options.headers = {
-                        'Access-Control-Allow-Origin': '*'
-                    };
-                    return options;
-                };
+            if (nome.trim() === "") {
+                alert("Digite um nome!");
+                return;
             }
+
+            container.innerHTML = `
+                <div id="imagemGerada" class="image-box">
+                    <div class="text">${nome}</div>
+                    <div class="reflection">${nome}</div>
+                </div>
+            `;
         }
 
-        async function loadM3U() {
-            try {
-                let response = await fetch(m3uUrl);
-                if (!response.ok) throw new Error("Erro ao acessar a lista.");
-                let text = await response.text();
-                let lines = text.split("\n");
-                let channels = [];
+        function baixarImagem() {
+            let imagem = document.getElementById("imagemGerada");
 
-                for (let i = 0; i < lines.length; i++) {
-                    if (lines[i].startsWith("#EXTINF")) {
-                        let parts = lines[i].split(",");
-                        let name = parts[1]?.trim();
-                        let logoMatch = lines[i].match(/tvg-logo="(.*?)"/);
-                        let logo = logoMatch ? logoMatch[1] : "";
-                        let url = lines[i + 1]?.trim();
-                        if (url && url.startsWith("http")) {
-                            channels.push({ name, url, logo });
-                        }
-                    }
-                }
-
-                if (channels.length === 0) throw new Error("Nenhum canal encontrado.");
-                displayChannels(channels);
-            } catch (error) {
-                document.getElementById("channel-list").innerHTML = `<p>${error.message}</p>`;
+            if (!imagem) {
+                alert("Gere um nome antes de baixar!");
+                return;
             }
-        }
 
-        function displayChannels(channels) {
-            let list = document.getElementById("channel-list");
-            list.innerHTML = "";
-            channels.forEach(channel => {
-                let div = document.createElement("div");
-                div.className = "channel";
-                div.innerHTML = `
-                    <img src="${channel.logo || 'https://via.placeholder.com/50'}">
-                    ${channel.name}
-                `;
-                div.onclick = () => playChannel(channel.url);
-                list.appendChild(div);
+            html2canvas(imagem).then(canvas => {
+                let link = document.createElement("a");
+                link.href = canvas.toDataURL("image/png");
+                link.download = "nome_gerado.png";
+                link.click();
             });
         }
-
-        function playChannel(url) {
-            if (!player) initializePlayer();
-            player.src({ src: url, type: 'application/x-mpegURL' });
-            player.play();
-        }
-
-        // Inicializar o player e carregar canais
-        initializePlayer();
-        loadM3U();
     </script>
 </body>
 </html>
