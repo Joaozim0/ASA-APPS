@@ -2,9 +2,10 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=1280, user-scalable=no">
     <title>ASA APPS - Loja de Aplicativos</title>
     <style>
+        /* Ajustar o tamanho da fonte e dos elementos */
         body {
             font-family: Arial, sans-serif;
             background-color: #f9f9f9;
@@ -14,9 +15,8 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            font-size: 1.2em;
+            font-size: 2em; /* Aumentar o tamanho da fonte */
         }
-
         header {
             background-color: #007BFF;
             color: white;
@@ -24,75 +24,66 @@
             width: 100%;
             text-align: center;
         }
-
         .menu-buttons {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 30px;
             margin-top: 10px;
             flex-wrap: wrap;
         }
-
         .menu-buttons a {
             text-decoration: none;
-            padding: 10px 15px;
+            padding: 20px 30px;
             border-radius: 8px;
             color: white;
             font-weight: bold;
             background-color: #007BFF;
-            font-size: 1em;
-            transition: background 0.3s;
+            font-size: 1.5em; /* Aumentar o tamanho da fonte */
+            display: inline-block;
         }
-
-        .menu-buttons a:hover {
-            background-color: #0056b3;
-        }
-
         .app-container {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 30px;
-            padding: 20px;
-            width: 95%;
-            max-width: 1500px;
+            gap: 40px;
+            padding: 30px;
+            width: 90%;
+            max-width: 1600px;
         }
-
+        .app-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            width: 250px;
+        }
+        .app-card img {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+        }
         .buttons {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            margin-top: 15px;
+            gap: 15px;
+            margin-top: 20px;
         }
-
         .buttons a {
             text-decoration: none;
-            padding: 10px;
+            padding: 15px;
             border-radius: 8px;
             color: white;
             font-weight: bold;
             background-color: #007BFF;
             display: block;
-            font-size: 1em;
+            font-size: 1.5em; /* Aumentar o tamanho da fonte */
         }
-
-        .buttons a:hover {
-            background-color: #0056b3;
-        }
-
-        .app-card img {
-            width: 100px;
-            height: 100px;
-            object-fit: contain;
-        }
-
         a:focus {
-            outline: 3px solid yellow;
+            outline: 5px solid yellow; /* Melhor para controle remoto */
         }
     </style>
 </head>
 <body>
-
     <header>
         <h1>ASA APPS</h1>
     </header>
