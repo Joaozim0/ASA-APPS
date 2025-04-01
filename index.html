@@ -14,7 +14,7 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            font-size: 1.2em; /* Reduzi um pouco para melhor adaptação */
+            font-size: 1.2em;
         }
 
         header {
@@ -25,7 +25,6 @@
             text-align: center;
         }
 
-        /* Contêiner dos botões do menu */
         .menu-buttons {
             display: flex;
             justify-content: center;
@@ -34,7 +33,6 @@
             flex-wrap: wrap;
         }
 
-        /* Botões do menu */
         .menu-buttons a {
             text-decoration: none;
             padding: 10px 15px;
@@ -42,7 +40,7 @@
             color: white;
             font-weight: bold;
             background-color: #007BFF;
-            font-size: 1em; /* Mantém o tamanho normal dos botões */
+            font-size: 1em;
             transition: background 0.3s;
         }
 
@@ -60,7 +58,6 @@
             max-width: 1500px;
         }
 
-        /* Estilo dos botões dentro dos cards de aplicativos */
         .buttons {
             display: flex;
             flex-direction: column;
@@ -76,21 +73,19 @@
             font-weight: bold;
             background-color: #007BFF;
             display: block;
-            font-size: 1em; /* Mantém o tamanho normal dos botões dentro dos apps */
+            font-size: 1em;
         }
 
         .buttons a:hover {
             background-color: #0056b3;
         }
 
-        /* Correção do tamanho das imagens */
         .app-card img {
-            width: 100px; /* Ajuste para manter um tamanho padrão */
+            width: 100px;
             height: 100px;
             object-fit: contain;
         }
 
-        /* Melhor compatibilidade com controles remotos */
         a:focus {
             outline: 3px solid yellow;
         }
@@ -102,89 +97,78 @@
         <h1>ASA APPS</h1>
     </header>
 
-    <!-- Botões horizontais -->
     <div class="menu-buttons">
         <a href="smartphone.html">Apps mobile</a>
-        <a href="1Tv-ao-vivo.html">em breve </a>
-        <a href="1fut-linha.html">Launcher Tv em Breve</a>
+        <a href="1Tv-ao-vivo.html">Em breve</a>
+        <a href="1fut-linha.html">Launcher TV em Breve</a>
         <a href="#">Em breve</a>
     </div>
 
     <div class="app-container">
-        <!-- Exemplo de um aplicativo -->
         <div class="app-card">
             <img src="https://raw.githubusercontent.com/Joaozim0/Image/main/IMG_2462.png" alt="TVExpress">
             <h2>TVExpress</h2>
             <div class="buttons">
                 <a href="https://www.mediafire.com/file/qqedmqrajiwfjcu/TV_3.7.0_20241105_stb_generic.apk/file">SmartTV/TVbox</a>
-                <a href="https://www.mediafire.com/file/6ufokq0lm1ijf4w/TVMobile_mob04001_4.4.1_mobile_web.apk/file">Smartphone</a>
             </div>
         </div>
 
-        <!-- UniTV -->
         <div class="app-card">
             <img src="https://raw.githubusercontent.com/Joaozim0/Image/main/IMG_2463.jpeg" alt="UniTV">
             <h2>UniTV</h2>
             <div class="buttons">
-                <a href="https://www.mediafire.com/file/hcab72tsmmwrwyy/unitv_UN-TVAK-1.apk/file" tabindex="3">SmartTV/TVbox</a>
-                <a href="https://www.mediafire.com/file/2i49dyf8gq9ab5m/unitviptvmobile_UN-MOAP-1.apk/file" tabindex="4">Smartphone</a>
+                <a href="https://www.mediafire.com/file/hcab72tsmmwrwyy/unitv_UN-TVAK-1.apk/file">SmartTV/TVbox</a>
             </div>
         </div>
 
-        <!-- OnPix -->
         <div class="app-card">
             <img src="https://raw.githubusercontent.com/Joaozim0/Image/main/IMG_2467.png" alt="OnPix">
             <h2>OnPix</h2>
             <div class="buttons">
-                <a href="https://www.mediafire.com/file/t3y1av1k13gym02/PIX+TV_1.0.0_20220701_stb+(2).apk/file" tabindex="5">SmartTV/TVbox</a>
-                <a href="https://www.mediafire.com/file/ualo0v4vvyc0en5/onpix_mobile.apk/file" tabindex="6">Smartphone</a>
-            </div>
-        </div>
-        <div class="app-card">
-            <img src="https://raw.githubusercontent.com/Joaozim0/Image/refs/heads/main/IMG_2488.jpeg" alt="Ícone Launcher Manager">
-            <h2>Brasil Tv </h2>
-            <div class="buttons">
-                <a href="https://www.mediafire.com/file/5ae426iyt8gp508/brasiltvmobile_BRMDW.apk/file">Smartphone</a>
+                <a href="https://www.mediafire.com/file/t3y1av1k13gym02/PIX+TV_1.0.0_20220701_stb+(2).apk/file">SmartTV/TVbox</a>
             </div>
         </div>
 
-        <!-- BlueTV -->
+        <div class="app-card">
+            <img src="https://raw.githubusercontent.com/Joaozim0/Image/refs/heads/main/IMG_2488.jpeg" alt="Brasil TV">
+            <h2>Brasil TV</h2>
+            <div class="buttons">
+                <a href="https://www.mediafire.com/file/5ae426iyt8gp508/brasiltvmobile_BRMDW.apk/file">SmartTV/TVbox</a>
+            </div>
+        </div>
+
         <div class="app-card">
             <img src="https://raw.githubusercontent.com/Joaozim0/Image/main/IMG_2468.jpeg" alt="BlueTV">
             <h2>BlueTV</h2>
             <div class="buttons">
-                <a href="https://www.mediafire.com/file/u64zao60zsva5ux/BlueTV_v3.4.1.apk/file" tabindex="7">SmartTV/TVbox</a>
-                <a href="https://www.mediafire.com/file/ul2awioj62srvkn/Blue_Mobile_3.0.1_20240710_mobile.apk/file" tabindex="8">Smartphone</a>
+                <a href="https://www.mediafire.com/file/u64zao60zsva5ux/BlueTV_v3.4.1.apk/file">SmartTV/TVbox</a>
             </div>
         </div>
+
         <div class="app-card">
-            <img src="https://raw.githubusercontent.com/Joaozim0/Image/refs/heads/main/IMG_2487.png" alt="Ícone Launcher Manager">
+            <img src="https://raw.githubusercontent.com/Joaozim0/Image/refs/heads/main/IMG_2487.png" alt="HTV App">
             <h2>HTV App</h2>
             <div class="buttons">
                 <a href="https://www.mediafire.com/file/z3ezzfgis927zul/signHtv_BR-HPAK.apk/file">SmartTV/TVbox</a>
             </div>
         </div>
 
-        <!-- Eppi Cinema -->
         <div class="app-card">
             <img src="https://raw.githubusercontent.com/Joaozim0/Image/main/IMG_2469.jpeg" alt="Eppi Cinema">
             <h2>Eppi Cinema</h2>
             <div class="buttons">
-                <a href="https://www.mediafire.com/file/m9b6zb02cwmgthu/eppi_web_stb_PROD_4.0.3_20250224.apk/file" tabindex="9">SmartTV/TVbox</a>
-                <a href="https://www.mediafire.com/file/fb27h3dxw7por34/eppi_web_mobile_PROD_4.0.2_20241104.apk/file" tabindex="10">Smartphone</a>
+                <a href="https://www.mediafire.com/file/m9b6zb02cwmgthu/eppi_web_stb_PROD_4.0.3_20250224.apk/file">SmartTV/TVbox</a>
             </div>
         </div>
 
-        <!-- Nebu -->
         <div class="app-card">
             <img src="https://raw.githubusercontent.com/Joaozim0/Image/main/IMG_2470.png" alt="Nebu">
             <h2>Nebu</h2>
             <div class="buttons">
-                <a href="https://www.mediafire.com/file/po85zti60lmperv/nebu_generic_stb_PROD_1.0.1_20241202.apk/file" tabindex="11">SmartTV/TVbox</a>
-                <a href="https://www.mediafire.com/file/5jnxhml9se3b6tv/nebu_generic_mobile_PROD_1.0.1beta2_20241120.apk/file" tabindex="12">Smartphone</a>
+                <a href="https://www.mediafire.com/file/po85zti60lmperv/nebu_generic_stb_PROD_1.0.1_20241202.apk/file">SmartTV/TVbox</a>
             </div>
         </div>
-         <!-- SmartTube Beta -->
+
         <div class="app-card">
             <img src="https://raw.githubusercontent.com/Joaozim0/Image/main/IMG_2471.png" alt="SmartTube Beta">
             <h2>SmartTube Beta</h2>
@@ -192,8 +176,9 @@
                 <a href="https://www.mediafire.com/file/czkfkcv9q2ztwpk/smarttube_beta.apk/file">SmartTV/TVbox</a>
             </div>
         </div>
-                <div class="app-card">
-            <img src="https://raw.githubusercontent.com/Joaozim0/Image/refs/heads/main/IMG_2473.png" alt="Ícone Launcher Manager">
+
+        <div class="app-card">
+            <img src="https://raw.githubusercontent.com/Joaozim0/Image/refs/heads/main/IMG_2473.png" alt="Launcher Manager">
             <h2>Launcher Manager</h2>
             <div class="buttons">
                 <a href="https://www.mediafire.com/file/ifj7c6az3zlszus/Launcher+Manager+v1.0.3.apk/file">SmartTV/TVbox</a>
