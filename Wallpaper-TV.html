@@ -3,20 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Download de Wallpapers</title>
+    <title>Wallpapers para Smart TV</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             padding: 20px;
         }
-        .download-container {
-            margin-top: 50px;
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .image-container {
+            margin: 10px;
+            text-align: center;
+        }
+        img {
+            width: 300px;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
         }
         .download-btn {
-            display: inline-block;
-            padding: 15px 25px;
-            font-size: 18px;
+            display: block;
+            margin-top: 5px;
+            padding: 8px 12px;
             background-color: #28a745;
             color: white;
             text-decoration: none;
@@ -30,14 +42,43 @@
 </head>
 <body>
 
-    <h1>Download de Wallpapers para Smart TV</h1>
-    <p>Clique no botão abaixo para baixar o pacote de wallpapers.</p>
+    <h1>Wallpapers para Smart TV</h1>
+    <p>Clique para visualizar e baixar os wallpapers individualmente.</p>
 
-    <div class="download-container">
-        <a class="download-btn" href="https://github.com/Joaozim0/ASA-APPS/raw/refs/heads/main/Wallpeper%20TV.zip" download>
-            Baixar Wallpapers (ZIP)
-        </a>
-    </div>
+    <div class="gallery" id="gallery"></div>
+
+    <script>
+        // Lista das imagens (adicione o nome exato das imagens que estão na pasta)
+        const imagens = [
+            "Wallpaper1.jpg",
+            "Wallpaper2.jpg",
+            "Wallpaper3.jpg"
+        ];
+
+        // URL base das imagens no GitHub
+        const repoURL = "https://raw.githubusercontent.com/Joaozim0/ASA-APPS/b935ec4a6cc6d3c0a6373f70bed580adbd603d3d/Wallpeper%20TV/";
+
+        const gallery = document.getElementById("gallery");
+
+        imagens.forEach(img => {
+            const div = document.createElement("div");
+            div.classList.add("image-container");
+
+            const image = document.createElement("img");
+            image.src = repoURL + img;
+            image.alt = "Wallpaper";
+
+            const downloadLink = document.createElement("a");
+            downloadLink.href = repoURL + img;
+            downloadLink.download = img;
+            downloadLink.textContent = "Baixar";
+            downloadLink.classList.add("download-btn");
+
+            div.appendChild(image);
+            div.appendChild(downloadLink);
+            gallery.appendChild(div);
+        });
+    </script>
 
 </body>
 </html>
