@@ -48,28 +48,30 @@
     <div class="gallery" id="gallery"></div>
 
     <script>
-        // Lista das imagens (adicione o nome exato das imagens que estão na pasta)
+        // Lista das imagens (substitua pelos nomes exatos dos arquivos)
         const imagens = [
             "Wallpaper1.jpg",
             "Wallpaper2.jpg",
             "Wallpaper3.jpg"
         ];
 
-        // URL base das imagens no GitHub (usando a branch 'main')
+        // URL base das imagens (se renomear a pasta, altere aqui)
         const repoURL = "https://raw.githubusercontent.com/Joaozim0/ASA-APPS/main/Wallpeper%20TV/";
 
         const gallery = document.getElementById("gallery");
 
         imagens.forEach(img => {
+            const imgUrl = repoURL + encodeURIComponent(img); // Codifica o nome da imagem
+
             const div = document.createElement("div");
             div.classList.add("image-container");
 
             const image = document.createElement("img");
-            image.src = repoURL + img;
+            image.src = imgUrl;
             image.alt = "Wallpaper";
 
             const downloadLink = document.createElement("a");
-            downloadLink.href = repoURL + img;
+            downloadLink.href = imgUrl;
             downloadLink.download = img;
             downloadLink.textContent = "Baixar";
             downloadLink.classList.add("download-btn");
