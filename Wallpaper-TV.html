@@ -3,73 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wallpapers para Smart TV</title>
+    <title>Download de Wallpapers</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
+            padding: 20px;
         }
-        .gallery {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .image-container {
-            margin: 10px;
-        }
-        img {
-            width: 300px;
-            height: auto;
-            border-radius: 10px;
-            box-shadow: 0px 4px 8px rgba(0,0,0,0.2);
+        .download-container {
+            margin-top: 50px;
         }
         .download-btn {
-            display: block;
-            margin-top: 5px;
-            padding: 5px 10px;
+            display: inline-block;
+            padding: 15px 25px;
+            font-size: 18px;
             background-color: #28a745;
             color: white;
             text-decoration: none;
             border-radius: 5px;
+            font-weight: bold;
+        }
+        .download-btn:hover {
+            background-color: #218838;
         }
     </style>
 </head>
 <body>
 
-    <h1>Wallpapers para Smart TV</h1>
-    <div class="gallery" id="gallery"></div>
+    <h1>Download de Wallpapers para Smart TV</h1>
+    <p>Clique no botão abaixo para baixar o pacote de wallpapers.</p>
 
-    <script>
-        // Lista das imagens (substitua pelos nomes exatos dos arquivos do seu repositório)
-        const imagens = [
-            "wallpaper1.jpg",
-            "wallpaper2.jpg",
-            "wallpaper3.jpg"
-        ];
-
-        const repoURL = "https://raw.githubusercontent.com/Joaozim0/Wallpaper-smart-TV/main/";
-
-        const gallery = document.getElementById("gallery");
-
-        imagens.forEach(img => {
-            const div = document.createElement("div");
-            div.classList.add("image-container");
-
-            const image = document.createElement("img");
-            image.src = repoURL + img;
-            image.alt = "Wallpaper";
-
-            const downloadLink = document.createElement("a");
-            downloadLink.href = repoURL + img;
-            downloadLink.download = img;
-            downloadLink.textContent = "Baixar";
-            downloadLink.classList.add("download-btn");
-
-            div.appendChild(image);
-            div.appendChild(downloadLink);
-            gallery.appendChild(div);
-        });
-    </script>
+    <div class="download-container">
+        <a class="download-btn" href="https://github.com/Joaozim0/ASA-APPS/raw/refs/heads/main/Wallpeper%20TV.zip" download>
+            Baixar Wallpapers (ZIP)
+        </a>
+    </div>
 
 </body>
 </html>
