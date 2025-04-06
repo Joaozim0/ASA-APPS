@@ -8,16 +8,23 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
+            margin: 0;
+            padding: 0;
         }
         #canvas-container {
             position: relative;
             display: inline-block;
             border: 1px solid #000;
+            width: 100%;
+            max-width: 100%;
+            overflow: hidden;
         }
         canvas {
             position: absolute;
             top: 0;
             left: 0;
+            width: 100%;
+            height: auto;
         }
         input, button, select {
             margin: 5px;
@@ -84,6 +91,8 @@
         <button onclick="moveLine('left')">←</button>
         <button onclick="moveLine('right')">→</button>
         <button onclick="moveLine('down')">↓</button>
+        <button onclick="rotateLine('clockwise')">↻</button>
+        <button onclick="rotateLine('counterclockwise')">↺</button>
     </div>
 
     <script>
@@ -109,7 +118,7 @@
             img.onload = function() {
                 canvas.width = img.width;
                 canvas.height = img.height;
-                ctx.drawImage(img, 0, 0);
+                drawImage();
                 clearLines();
             };
         });
@@ -129,14 +138,20 @@
             clearLines();
         });
 
-        function drawLines() {
+        function drawImage() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             if (img) ctx.drawImage(img, 0, 0);
-            
+        }
+
+        function drawLines() {
+            drawImage();
             lines.forEach(line => {
                 ctx.beginPath();
-                ctx.moveTo(line.x, line.y - (line.angle * 5));
-                ctx.lineTo(line.x, canvas.height);
+                const angleInRadians = line.angle * (Math.PI / 180);
+                const endX = line.x + Math.cos(angleInRadians) * canvas.height;
+                const endY = line.y + Math.sin(angleInRadians) * canvas.height;
+                ctx.moveTo(line.x, line.y);
+                ctx.lineTo(endX, endY);
                 ctx.strokeStyle = line.color;
                 ctx.lineWidth = 3;
                 ctx.stroke();
@@ -183,7 +198,7 @@
 
         function clearLines() {
             lines = [];
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawImage();
             impedimentoTexto.style.display = "none";
         }
 
@@ -202,6 +217,21 @@
                         break;
                     case 'right':
                         line.x += moveAmount;
+                        break;
+                }
+            });
+            drawLines();
+        }
+
+        function rotateLine(direction) {
+            const rotateAmount = 5;
+            lines.forEach(line => {
+                switch (direction) {
+                    case 'clockwise':
+                        line.angle += rotateAmount;
+                        break;
+                    case 'counterclockwise':
+                        line.angle -= rotateAmount;
                         break;
                 }
             });
