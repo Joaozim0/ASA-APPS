@@ -40,7 +40,6 @@
     </style>
 </head>
 <body>
-
     <h2>VAR - Ferramenta de Impedimento</h2>
     
     <input type="file" id="upload" accept="image/*">
@@ -78,6 +77,13 @@
     <div id="canvas-container">
         <canvas id="draw-canvas"></canvas>
         <div id="impedimento-texto"></div>
+    </div>
+
+    <div>
+        <button onclick="moveLine('up')">↑</button>
+        <button onclick="moveLine('left')">←</button>
+        <button onclick="moveLine('right')">→</button>
+        <button onclick="moveLine('down')">↓</button>
     </div>
 
     <script>
@@ -181,7 +187,27 @@
             impedimentoTexto.style.display = "none";
         }
 
-    </script>
+        function moveLine(direction) {
+            const moveAmount = 5;
+            lines.forEach(line => {
+                switch (direction) {
+                    case 'up':
+                        line.y -= moveAmount;
+                        break;
+                    case 'down':
+                        line.y += moveAmount;
+                        break;
+                    case 'left':
+                        line.x -= moveAmount;
+                        break;
+                    case 'right':
+                        line.x += moveAmount;
+                        break;
+                }
+            });
+            drawLines();
+        }
 
+    </script>
 </body>
 </html>
