@@ -123,6 +123,11 @@
             };
         });
 
+        function drawImage() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (img) ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        }
+
         canvas.addEventListener("click", (event) => {
             if (lines.length < maxLines) { 
                 const rect = canvas.getBoundingClientRect();
@@ -137,11 +142,6 @@
             maxLines = parseInt(this.value);
             clearLines();
         });
-
-        function drawImage() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            if (img) ctx.drawImage(img, 0, 0);
-        }
 
         function drawLines() {
             drawImage();
