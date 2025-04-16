@@ -23,19 +23,6 @@
             width: 100%;
             text-align: center;
         }
-        .rss-link {
-            display: inline-block;
-            background-color: red;
-            color: white;
-            padding: 10px 15px;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: bold;
-            margin-top: 10px;
-        }
-        .rss-link:hover {
-            background-color: darkred;
-        }
         .rss-banner {
             background-color: red;
             color: white;
@@ -116,32 +103,21 @@
 <body>
     <header>
         <h1>ASA APPS</h1>
-        <p>
-            <a href="https://joaozim0.github.io/ASA-APPS/rss.xml" class="rss-link" target="_blank">📡 Assine nosso RSS</a>
-        </p>
     </header>
 
-    <!-- Faixa de notícias do RSS -->
+    <!-- Faixa de notícias com texto fixo -->
     <div class="rss-banner">
         <div class="rss-content" id="rss-text">
-            Carregando notícias...
+            Carregando informações...
         </div>
     </div>
 
     <script>
-        const rssFeedURL = 'https://api.rss2json.com/v1/api.json?rss_url=https://joaozim0.github.io/ASA-APPS/rss.xml';
-
-        fetch(rssFeedURL)
-            .then(response => response.json())
-            .then(data => {
-                const items = data.items;
-                const headlines = items.map(item => item.title).join(' | ');
-                document.getElementById('rss-text').textContent = `Últimas notícias: ${headlines}`;
-            })
-            .catch(error => {
-                document.getElementById('rss-text').textContent = 'Erro ao carregar notícias.';
-                console.error('Erro ao buscar RSS:', error);
-            });
+        document.getElementById('rss-text').textContent = 
+            "Ao baixar o aplicativo, caso esteja desatualizado, instale normalmente e atualize dentro do próprio app. | " +
+            "Se gostar do aplicativo, assine os planos apenas dentro dele para evitar golpes. | " +
+            "Os aplicativos não contêm vírus e podem ser verificados com qualquer antivírus. | " +
+            "Caso o app pare de funcionar ou o provedor encerre o suporte, não nos responsabilizamos — apenas facilitamos o download.";
     </script>
 
     <div class="menu-buttons">
