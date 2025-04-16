@@ -14,7 +14,7 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            font-size: 1.5em; /* Ajustar tamanho da fonte */
+            font-size: 1.5em;
         }
         header {
             background-color: #007BFF;
@@ -22,6 +22,37 @@
             padding: 20px;
             width: 100%;
             text-align: center;
+        }
+        .rss-link {
+            display: inline-block;
+            background-color: red;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .rss-link:hover {
+            background-color: darkred;
+        }
+        .rss-banner {
+            background-color: red;
+            color: white;
+            padding: 10px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            width: 100%;
+            font-weight: bold;
+        }
+        .rss-content {
+            display: inline-block;
+            padding-left: 100%;
+            animation: scroll 25s linear infinite;
+        }
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
         }
         .menu-buttons {
             display: flex;
@@ -37,7 +68,7 @@
             color: white;
             font-weight: bold;
             background-color: #007BFF;
-            font-size: 1em; /* Ajustar tamanho da fonte */
+            font-size: 1em;
             display: inline-block;
         }
         .app-container {
@@ -75,23 +106,10 @@
             font-weight: bold;
             background-color: #007BFF;
             display: block;
-            font-size: 1em; /* Ajustar tamanho da fonte */
+            font-size: 1em;
         }
         a:focus {
-            outline: 5px solid yellow; /* Melhor para controle remoto */
-        }
-        .rss-link {
-            display: inline-block;
-            background-color: red;
-            color: white;
-            padding: 10px 15px;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: bold;
-            margin-top: 10px;
-        }
-        .rss-link:hover {
-            background-color: darkred;
+            outline: 5px solid yellow;
         }
     </style>
 </head>
@@ -102,6 +120,29 @@
             <a href="https://joaozim0.github.io/ASA-APPS/rss.xml" class="rss-link" target="_blank">📡 Assine nosso RSS</a>
         </p>
     </header>
+
+    <!-- Faixa de notícias do RSS -->
+    <div class="rss-banner">
+        <div class="rss-content" id="rss-text">
+            Carregando notícias...
+        </div>
+    </div>
+
+    <script>
+        const rssFeedURL = 'https://api.rss2json.com/v1/api.json?rss_url=https://joaozim0.github.io/ASA-APPS/rss.xml';
+
+        fetch(rssFeedURL)
+            .then(response => response.json())
+            .then(data => {
+                const items = data.items;
+                const headlines = items.map(item => item.title).join(' | ');
+                document.getElementById('rss-text').textContent = `Últimas notícias: ${headlines}`;
+            })
+            .catch(error => {
+                document.getElementById('rss-text').textContent = 'Erro ao carregar notícias.';
+                console.error('Erro ao buscar RSS:', error);
+            });
+    </script>
 
     <div class="menu-buttons">
         <a href="smartphone.html">Apps mobile</a>
