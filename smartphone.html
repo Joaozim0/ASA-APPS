@@ -18,6 +18,24 @@
             padding: 15px;
             font-size: 1.5em;
         }
+        .rss-banner {
+            background-color: red;
+            color: white;
+            padding: 10px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            width: 100%;
+            font-weight: bold;
+        }
+        .rss-content {
+            display: inline-block;
+            padding-left: 100%;
+            animation: scroll 25s linear infinite;
+        }
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
         .app-container {
             display: flex;
             flex-wrap: wrap;
@@ -59,6 +77,21 @@
 <header>
     ASA APPS - Smartphone
 </header>
+
+<!-- Faixa de notícias tipo RSS -->
+<div class="rss-banner">
+    <div class="rss-content" id="rss-text">
+        Carregando informações...
+    </div>
+</div>
+
+<script>
+    document.getElementById('rss-text').textContent =
+        "Ao baixar o aplicativo, caso esteja desatualizado, instale normalmente e atualize dentro do próprio app. | " +
+        "Se gostar do aplicativo, assine os planos apenas dentro dele para evitar golpes. | " +
+        "Os aplicativos não contêm vírus e podem ser verificados com qualquer antivírus. | " +
+        "Caso o app pare de funcionar ou o provedor encerre o suporte, não nos responsabilizamos — apenas facilitamos o download.";
+</script>
 
 <div class="app-container">
     <div class="app-card">
