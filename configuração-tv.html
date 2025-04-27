@@ -1,1 +1,125 @@
-o
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>ASA APPS - Loja de Aplicativos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            font-size: 1.5em;
+        }
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 20px;
+            width: 100%;
+            text-align: center;
+        }
+        .rss-banner {
+            background-color: red;
+            color: white;
+            padding: 10px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            width: 100%;
+            font-weight: bold;
+        }
+        .rss-content {
+            display: inline-block;
+            padding-left: 100%;
+            animation: scroll 25s linear infinite;
+        }
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+        .menu-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        .menu-buttons a {
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            background-color: #007BFF;
+            font-size: 1em;
+            display: inline-block;
+        }
+        .app-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+            width: 90%;
+            max-width: 1600px;
+        }
+        .app-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            width: 200px;
+        }
+        .app-card img {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+        }
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .buttons a {
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            background-color: #007BFF;
+            display: block;
+            font-size: 1em;
+        }
+        a:focus {
+            outline: 5px solid yellow;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>ASA APPS</h1>
+    </header>
+
+    <!-- Faixa de notícias com texto fixo -->
+    <div class="rss-banner">
+        <div class="rss-content" id="rss-text">
+            Carregando informações...
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('rss-text').textContent = 
+            "Para fazer as modificações, assista aos vídeos para configurar seu TV Box, smartphone ou Smart TV." +
+        ";
+    </script>
+
+    <div class="menu-buttons">
+        <a href="smartphone.html">Apps mobile</a>
+        <a href="1Tv-ao-vivo.html">Em breve</a>
+        <a href="#">Em breve</a>
+    </div>
