@@ -21,7 +21,6 @@
             color: white;
             padding: 20px;
             width: 100%;
-            text-align: center;
         }
         .rss-banner {
             background-color: red;
@@ -56,7 +55,6 @@
             font-weight: bold;
             background-color: #007BFF;
             font-size: 1em;
-            display: inline-block;
         }
         .app-container {
             display: flex;
@@ -73,6 +71,7 @@
             border-radius: 15px;
             text-align: center;
             width: 200px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
         .app-card img {
             width: 150px;
@@ -98,82 +97,122 @@
         a:focus {
             outline: 5px solid yellow;
         }
+        /* Modal e Fundo */
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        #modal {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+        .modal-buttons {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .modal-buttons a {
+            background-color: #007BFF;
+            padding: 12px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+        .modal-buttons a:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
-<body>
-    <header>
-        <h1>Configurações e Otimização </h1>
-    </header>
 
-    <!-- Faixa de notícias com texto fixo -->
-    <div class="rss-banner">
-        <div class="rss-content" id="rss-text">
-            Carregando informações...
+<body>
+
+<header>
+    <h1>Configurações e Otimização</h1>
+</header>
+
+<div class="rss-banner">
+    <div class="rss-content" id="rss-text">
+        Carregando informações...
+    </div>
+</div>
+
+<script>
+    document.getElementById('rss-text').textContent = 
+        "Para fazer as modificações, assista aos vídeos para configurar seu TV Box, smartphone ou Smart TV.";
+</script>
+
+<div class="menu-buttons">
+    <a href="smartphone.html">Apps mobile</a>
+    <a href="index.html">Apps Tvbox e Smart TV</a>
+    <a href="#">Em breve</a>
+</div>
+
+<!-- Container dos aplicativos -->
+<div class="app-container">
+
+    <!-- Aplicativo 1 -->
+    <div class="app-card">
+        <img src="https://raw.githubusercontent.com/Joaozim0/Image/refs/heads/main/IMG_2473.png" alt="Launcher Manager">
+        <h2>Launcher Manager</h2>
+        <div class="buttons">
+            <a href="#" onclick="openModal('https://www.mediafire.com/file/ifj7c6az3zlszus/Launcher+Manager+v1.0.3.apk/file', 'https://youtu.be/KpGsi5FR1fc?si=NWBBhdXHD80krvfs')">SmartTV/TVbox</a>
         </div>
     </div>
 
-    <script>
-        document.getElementById('rss-text').textContent = 
-            "Para fazer as modificações, assista aos vídeos para configurar seu TV Box, smartphone ou Smart TV."
-    </script>
-
-    <div class="menu-buttons">
-        <a href="smartphone.html">Apps mobile</a>
-        <a href="index.html">Apps Tvbox e Smart TV</a>
-        <a href="#">Em breve</a>
+    <!-- Aplicativo 2 (Exemplo de outro aplicativo) -->
+    <div class="app-card">
+        <img src="https://via.placeholder.com/150" alt="Outro App">
+        <h2>Outro Aplicativo</h2>
+        <div class="buttons">
+            <a href="#" onclick="openModal('https://link-do-apk-do-outro-app.com', 'https://link-do-tutorial-do-outro-app.com')">Smartphone</a>
+        </div>
     </div>
 
-<style>
-.app-card {
-    background: #f9f9f9;
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    padding: 20px;
-    margin: 20px;
-    text-align: center;
-}
+</div>
 
-.app-card img {
-    width: 100%;
-    border-radius: 10px;
-}
-
-.app-card iframe {
-    width: 100%;
-    height: 200px;
-    border-radius: 15px;
-    border: none;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-}
-
-.buttons a {
-    display: inline-block;
-    margin-top: 15px;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    text-decoration: none;
-    border-radius: 8px;
-    transition: background-color 0.3s;
-}
-
-.buttons a:hover {
-    background-color: #0056b3;
-}
-</style>
-
-<div class="app-card">
-    <img src="https://raw.githubusercontent.com/Joaozim0/Image/refs/heads/main/IMG_2473.png" alt="Launcher Manager">
-    <h2>Launcher Manager</h2>
-    <div class="buttons">
-        <a href="https://www.mediafire.com/file/ifj7c6az3zlszus/Launcher+Manager+v1.0.3.apk/file">SmartTV/TVbox</a>
+<!-- Tela de fundo e Modal -->
+<div id="overlay">
+    <div id="modal">
+        <h2>Assista ao tutorial para que tudo dê certo</h2>
+        <div class="modal-buttons">
+            <a id="downloadBtn" href="#" target="_blank">Baixar Aplicativo</a>
+            <a id="videoBtn" href="#" target="_blank">Assistir Vídeo</a>
+        </div>
     </div>
 </div>
 
-<div class="app-card">
-    <iframe src="https://www.youtube.com/embed/KpGsi5FR1fc" allowfullscreen></iframe>
-    <h2>Vídeo Tutorial</h2>
-    <div class="buttons">
-        <a href="https://youtu.be/KpGsi5FR1fc?si=NWBBhdXHD80krvfs" target="_blank">Assistir no YouTube</a>
-    </div>
-</div>
+<script>
+// Função para abrir o modal e mudar os links dinamicamente
+function openModal(downloadLink, videoLink) {
+    document.getElementById('downloadBtn').href = downloadLink;
+    document.getElementById('videoBtn').href = videoLink;
+    document.getElementById('overlay').style.display = 'flex';
+}
+
+// Fecha o modal clicando fora
+document.getElementById('overlay').addEventListener('click', function(e) {
+    if (e.target.id === 'overlay') {
+        document.getElementById('overlay').style.display = 'none';
+    }
+});
+</script>
+
+</body>
+</html>
