@@ -3,12 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reproduzir Vídeo</title>
+    <title>Player de Vídeo Personalizado</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1f1f1f;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+
+        .video-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding-top: 50px;
+        }
+
+        .video-player {
+            width: 100%;
+            height: 500px;
+            background-color: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .controls {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        .progress-bar {
+            flex-grow: 1;
+            height: 5px;
+            background-color: #555;
+            border-radius: 5px;
+            margin: 0 10px;
+            cursor: pointer;
+        }
+
+        .progress-bar span {
+            display: block;
+            width: 0;
+            height: 100%;
+            background-color: #4CAF50; /* Cor verde */
+            border-radius: 5px;
+        }
+
+        .play-btn,
+        .volume-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .volume-bar {
+            width: 100px;
+        }
+
+        .volume-bar input {
+            width: 100%;
+            cursor: pointer;
+        }
+
+    </style>
 </head>
 <body>
-    <video width="100%" controls>
-        <source src="https://drive.google.com/uc?export=download&id=1GLzNHMkHRKWRfIRQr-BfEDN_ek4Kl-5t" type="video/mp4">
-        Seu navegador não suporta o formato de vídeo.
-    </video>
+    <div class="video-container">
+        <div class="video-player">
+            <video id="video" width="100%" controls>
+                <source src="https://drive.google.com/uc?export=download&id=1GLzNHMkHRKWRfIRQr-BfEDN_ek4Kl-5t" type="video/mp4">
+                Seu navegador não suporta o formato de vídeo.
+            </video>
+            <div class="controls">
+                <button id="playPause" class="play-btn">►</button>
+                <div class="progress-bar" id="progress-bar">
+                    <span id="progress"></span>
+                </div>
+                <button id="muteUnmute" class="volume-btn">🔊</button>
+                <div class="volume-bar">
+                    <input type="range" id="volume" min="0" max="1" step="0.01" value="1">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const video = document.getElementById('video');
+        const playPauseBtn = document.getElementById('playPause');
+        const progressBar = document.getElementById('progress-bar');
+        const progress = document.getElementById('progress');
+        const muteUnmuteBtn = document.getElementById('muteUnmute');
+        const volumeSlider = document.getElementById('volume');
+
+        // Play/Pause button functionality
+        playPauseBtn.addEventListener('click', () => {
+            if (video.paused) {
+                video.play();
+                playPauseBtn.textContent = '❚❚';
+            } else {
+                video.pause();
+                playPauseBtn.textContent = '►';
+            }
+        });
+
+        // Mute/Unmute button functionality
+        muteUnmuteBtn.addEventListener('click', () => {
+            if (video.muted) {
+                video.muted = false;
+                muteUnmuteBtn.textContent = '🔊';
+            } else {
+                video.muted = true;
+                muteUnmuteBtn.textContent = '🔇';
+            }
+        });
+
+        // Volume control functionality
+        volumeSlider.addEventListener('input', (e) => {
+            video.volume = e.target.value;
+        });
+
+        // Update progress bar as the video plays
+        video.addEventListener('timeupdate', () => {
+            const progressPercentage = (video.currentTime / video.duration) * 100;
+            progress.style.width = `${progressPercentage}%`;
+        });
+
+        // Click to seek functionality in the progress bar
+        progressBar.addEventListener('click', (e) => {
+            const progressWidth = progressBar.offsetWidth;
+            const clickX = e.offsetX;
+            const duration = video.duration;
+            video.currentTime = (clickX / progressWidth) * duration;
+        });
+    </script>
 </body>
 </html>
